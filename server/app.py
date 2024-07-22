@@ -1,6 +1,5 @@
 from config import app, api
 from flask import make_response, session, request
-from flask_migrate import Migrate
 from models import db, User
 from flask_restful import Resource
 
