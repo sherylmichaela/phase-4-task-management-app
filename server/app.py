@@ -27,7 +27,7 @@ def authenticate():
 
 class Signup(Resource):
     def post(self):
-        user = User(username=request.json.get('username'), email=request.json.get('email'))
+        user = User(username=request.json.get('username'), email=request.json.get('email'), hashed_password=request.json.get('password'))
 
         db.session.add(user)
         db.session.commit()
@@ -44,7 +44,7 @@ class Login(Resource):
     def post(self):
         user = User.query.filter(User.username == request.json.get('username')).first()
 
-        if user:
+        if user and user.authenticate(request.json.get('password')):
             session['user'] = user.to_dict()
 
             return make_response({"message": "Log in successful!"}, 200)
