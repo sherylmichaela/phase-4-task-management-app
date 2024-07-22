@@ -8,6 +8,23 @@ from flask_restful import Resource
 def index():
     return make_response({"message": "Welcome to the Task Management App!"}, 200)
 
+@app.before_request
+def authenticate():
+    exempted_routes = {
+        "/": ["GET"],
+        "/signup": ["POST"],
+        "/login": ["POST"]
+    }
+
+    if request.path in exempted_routes:
+        allowed_methods = exempted_routes[request.path]
+
+        if request.method in allowed_methods:
+            return None
+        
+    if 'user' not in session:
+        return make_response({"message": "Unauthorised"}, 403)
+
 class Signup(Resource):
     def post(self):
         user = User(username=request.json.get('username'), email=request.json.get('email'))
@@ -48,10 +65,10 @@ class Tasks(Resource):
         
         return make_response({"error": "No user is currently signed in."}, 403)
 
-api.add_resource(Signup, '/signup')
-api.add_resource(Login, '/login')
-api.add_resource(Logout, '/logout')
-api.add_resource(Tasks, '/tasks')
+api.add_resource(Signup, '/signup', endpoint="signup")
+api.add_resource(Login, '/login', endpoint="login")
+api.add_resource(Logout, '/logout', endpoint="logout")
+api.add_resource(Tasks, '/tasks', endpoint="tasks")
 
 if __name__ == "__main__":
     app.run(port=4000, debug=True)
