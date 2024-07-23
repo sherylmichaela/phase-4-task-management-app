@@ -2,6 +2,7 @@ from config import app, api
 from flask import make_response, session, request
 from models import db, User
 from flask_restful import Resource
+from sqlalchemy import or_
 
 @app.route('/')
 def index():
@@ -41,14 +42,21 @@ class Signup(Resource):
     
 class Login(Resource):
     def post(self):
-        user = User.query.filter(User.username == request.json.get('username')).first()
 
-        if user and user.authenticate(request.json.get('password')):
+        user_identifier = request.json.get('username') or request.json.get('email')
+        user_password = request.json.get('password')
+
+        if not user_identifier or not user_password:
+            return make_response({"error": "Username/email and password are required"}, 400)
+
+        user = User.query.filter(or_(User.username == request.json.get('username'), User.email.like(f"%{request.json.get('email')}%"))).first()
+
+        if user and user.authenticate(user_password):
             session['user'] = user.to_dict()
 
             return make_response({"message": "Log in successful!"}, 200)
         
-        return make_response({"error": "Unauthorised login"}, 403)
+        return make_response({"error": "Incorrect username/password"}, 401)
     
 class Logout(Resource):
     def delete(self):
