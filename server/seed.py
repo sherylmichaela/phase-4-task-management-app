@@ -14,5 +14,6 @@ def enter_user():
         db.session.commit()
 
 if __name__ == '__main__':
-    delete_all_users()
+    pass
+    # delete_all_users()
     # enter_user()
