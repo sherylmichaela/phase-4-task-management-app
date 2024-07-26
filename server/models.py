@@ -2,6 +2,7 @@ from config import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
 
 
 class User(db.Model, SerializerMixin):
@@ -14,7 +15,7 @@ class User(db.Model, SerializerMixin):
 
     tasks = db.relationship('Task', back_populates='user')
 
-    @hybrid_property
+    @hybrid_property #getter
     def hashed_password(self):
         return self._hashed_password
     
@@ -26,6 +27,18 @@ class User(db.Model, SerializerMixin):
 
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._hashed_password, password.encode('utf-8'))
+    
+    @validates('username')
+    def validate_username(self, key, username):
+        if not username:
+            raise ValueError('username is required')
+        
+        user = User.query.filter(User.username == username).first()
+
+        if user:
+            raise ValueError('username is already taken')
+        
+        return username
 
     def __repr__(self):
         return f"<User {self.id}: {self.username}>"
@@ -43,7 +56,7 @@ class Task(db.Model, SerializerMixin):
 
     user = db.relationship('User', back_populates='tasks')
     subtasks = db.relationship('Subtask', back_populates='task')
-    tasktags = db.relationship('Tasktag', back_populates='task')
+    tasktags = db.relationship('TaskTag', back_populates='task')
     tags = association_proxy('tasktags', 'tag', creator=lambda t: TaskTag(tag=t))
 
     def __repr__(self):
@@ -56,7 +69,7 @@ class Tag(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String(255), nullable=False, unique=True)
 
-    tasktags = db.relationship('Tasktag', back_populates='tag')
+    tasktags = db.relationship('TaskTag', back_populates='tag')
     tasks = association_proxy('tasktags', 'task', creator=lambda t: TaskTag(task=t))
 
     def __repr__(self):
