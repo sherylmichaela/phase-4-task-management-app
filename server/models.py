@@ -3,6 +3,7 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
+import re
 
 
 class User(db.Model, SerializerMixin):
@@ -33,13 +34,31 @@ class User(db.Model, SerializerMixin):
         if not username:
             raise ValueError('username is required')
         
+        # Max 20 characters long. Starts with a letter only. Can't finish with special characters at the end of the string.
+        pattern = r'^[a-zA-Z][a-zA-Z0-9_.]{1,18}[a-zA-Z0-9]$'
+
+        if not re.match(pattern, username):
+            raise ValueError('invalid username')
+        
         user = User.query.filter(User.username == username).first()
 
         if user:
             raise ValueError('username is already taken')
         
         return username
+    
+    @validates('email')
+    def validate_password(self, key, email):
+        if not email:
+            raise ValueError('email is required')
+        
+        pattern = r'^[a-zA-Z0-9_.-]+\@[a-zA-Z0-9]+\.[a-zA-Z]{2,5}$'
 
+        if not re.match(pattern, email):
+            raise ValueError('invalid email address')
+        
+        return email
+        
     def __repr__(self):
         return f"<User {self.id}: {self.username}>"
     
