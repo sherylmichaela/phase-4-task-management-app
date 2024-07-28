@@ -15,5 +15,7 @@ def enter_user():
 
 if __name__ == '__main__':
     pass
-    # delete_all_users()
+    delete_all_users()
     # enter_user()
+
+    print('Seeding successful!')

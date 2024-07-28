@@ -16,6 +16,8 @@ class User(db.Model, SerializerMixin):
 
     tasks = db.relationship('Task', back_populates='user')
 
+    serialize_rules = ('-_hashed_password', )
+
     @hybrid_property #getter
     def hashed_password(self):
         return self._hashed_password
@@ -35,7 +37,7 @@ class User(db.Model, SerializerMixin):
             raise ValueError('username is required')
         
         # Max 20 characters long. Starts with a letter only. Can't finish with special characters at the end of the string.
-        pattern = r'^[a-zA-Z][a-zA-Z0-9_.]{1,18}[a-zA-Z0-9]$'
+        pattern = r'^[a-zA-Z][a-zA-Z0-9_.]{3,18}[a-zA-Z0-9]$'
 
         if not re.match(pattern, username):
             raise ValueError('invalid username')
