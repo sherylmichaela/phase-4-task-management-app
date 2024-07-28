@@ -16,7 +16,7 @@ class User(db.Model, SerializerMixin):
 
     tasks = db.relationship('Task', back_populates='user')
 
-    serialize_rules = ('-_hashed_password', )
+    serialize_rules = ('-_hashed_password', '-tasks.user')
 
     @hybrid_property #getter
     def hashed_password(self):
@@ -37,7 +37,7 @@ class User(db.Model, SerializerMixin):
             raise ValueError('username is required')
         
         # Max 20 characters long. Starts with a letter only. Can't finish with special characters at the end of the string.
-        pattern = r'^[a-zA-Z][a-zA-Z0-9_.]{3,18}[a-zA-Z0-9]$'
+        pattern = r'^[a-zA-Z][a-zA-Z0-9_.]{2,18}[a-zA-Z0-9]$'
 
         if not re.match(pattern, username):
             raise ValueError('invalid username')
@@ -80,6 +80,8 @@ class Task(db.Model, SerializerMixin):
     tasktags = db.relationship('TaskTag', back_populates='task')
     tags = association_proxy('tasktags', 'tag', creator=lambda t: TaskTag(tag=t))
 
+    serialize_rules = ('-user_id', '-user.tasks', '-subtasks.task', '-tasktags.task')
+
     def __repr__(self):
         return f"Task {self.id}: {self.task_name} due by {self.task_due_date} | Status: {self.task_status}"
     
@@ -92,6 +94,8 @@ class Tag(db.Model, SerializerMixin):
 
     tasktags = db.relationship('TaskTag', back_populates='tag')
     tasks = association_proxy('tasktags', 'task', creator=lambda t: TaskTag(task=t))
+
+    serialize_rules = ('-tasktags.tag', '-tasks.tasktags')
 
     def __repr__(self):
         return f"Tag {self.id}: {self.tag_name}"
@@ -109,6 +113,8 @@ class TaskTag(db.Model, SerializerMixin): # Only main tasks (not subtasks) can b
     task = db.relationship('Task', back_populates='tasktags')
     tag = db.relationship('Tag', back_populates='tasktags')
 
+    serialize_rules = ('-task.tasktags', '-tag.tasktags')
+
     def __repr__(self):
         return f"The task [{self.task.task_name}] has tag [{self.tag.tag}] "
     
@@ -123,6 +129,8 @@ class Subtask(db.Model, SerializerMixin):
     subtask_status = db.Column(db.String, default="Not Completed")
 
     task = db.relationship('Task', back_populates='subtasks')
+
+    serialize_rules = ('-task.subtasks', )
 
     def __repr__(self):
         return f"Subtask: {self.subtask_name} due by {self.subtask_due_date} | Status: {self.subtask_status}"
