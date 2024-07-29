@@ -83,11 +83,15 @@ class Tasks(Resource):
     def get(self):
 
         if 'user_id' in session:
-            tasks = [task.to_dict() for task in Task.query.all()]
+            my_tasks = Task.query.filter(Task.user_id == session['user_id']).all()
+
+            if len(my_tasks) > 0:
+                tasks = [task.to_dict() for task in my_tasks]
+                return make_response(tasks, 200)
+             
+            return make_response({"message": "No task created yet"}, 200)
         
-            return make_response(tasks, 200)
-        
-        return make_response({"error": "Unauthorised access"})
+        return make_response({"error": "Pls log in to view tasks."}, 401)
     
     def post(self):
         task_name = request.json.get('task_name')
