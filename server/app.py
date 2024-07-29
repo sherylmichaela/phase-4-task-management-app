@@ -44,16 +44,26 @@ class Signup(Resource):
     
 class Login(Resource):
     def post(self):
-
         username = request.json.get('username')
         email = request.json.get('email')
         password = request.json.get('password')
 
-        if username and not email:
-            user = User.query.filter(User.username == username).first()
+        user = User.query.filter(User.username == username).first()
 
-        elif email and not username:
+        if not user:
             user = User.query.filter(User.email == email).first()
+
+        # username = request.json.get('username')
+        # email = request.json.get('email')
+        # password = request.json.get('password')
+
+        # user = None
+
+        # if username and not email:
+        #     user = User.query.filter(User.username == username).first()
+
+        # elif email and not username:
+        #     user = User.query.filter(User.email == email).first()
 
         if user and user.authenticate(password):
             session['user_id'] = user.id

@@ -15,7 +15,9 @@ export default function Index({ user }) {
           <Navbar.Collapse className="justify-content-end">
             {user ? (
               <React.Fragment>
-                <Navbar.text>Signed in as: {user.username}</Navbar.text>
+                <Navbar.Text className="me-3">
+                  Signed in as: {user.username}
+                </Navbar.Text>
                 <Link to="/logout">
                   <button className="btn btn-danger">Logout</button>
                 </Link>
