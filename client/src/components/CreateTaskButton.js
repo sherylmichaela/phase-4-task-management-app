@@ -4,8 +4,8 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import Button from "react-bootstrap/Button";
 import CreateTask from "./CreateTask";
+import "./CreateTaskButton.css";
 
 export default function CreateTaskButton(props) {
   const [taskName, setTaskName] = useState("");
@@ -71,19 +71,28 @@ export default function CreateTaskButton(props) {
                 </Form.Group>
               </Col>
             </Row>
+            <Form onSubmit={handleSubmit}>
+              <Row className="mt-3">
+                <Col>
+                  <input
+                    type="submit"
+                    className="btn btn-primary btn-block"
+                    value="Add task"
+                  />
+                </Col>
+                <Col>
+                  <input
+                    type="submit"
+                    className="btn btn-secondary btn-block"
+                    value="Close"
+                    onClick={props.onHide}
+                  />
+                </Col>
+              </Row>
+            </Form>
           </Form>
         </Container>
       </Modal.Body>
-      <Modal.Footer>
-        <Form onSubmit={handleSubmit}>
-          <Button variant="secondary" className="me-2" onClick={props.onHide}>
-            Close
-          </Button>
-          <Button variant="primary" type="submit">
-            Add task
-          </Button>
-        </Form>
-      </Modal.Footer>
     </Modal>
   );
 }
