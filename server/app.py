@@ -119,6 +119,20 @@ class Tasks(Resource):
         
         return make_response({"error": "error occurred"}, 400)
 
+# class Tags(Resource):
+#     def get(self):
+
+#         if 'user_id' in session:
+#             my_tasks = Task.query.filter(Task.user_id == session['user_id']).all()
+
+#             if len(my_tasks) > 0:
+#                 tasks = [task.to_dict() for task in my_tasks]
+#                 return make_response(tasks, 200)
+                
+#             return make_response({"message": "No task created yet"}, 200)
+
+#         return make_response({"error": "Pls log in to view tasks."}, 401)
+
 api.add_resource(Signup, '/signup', endpoint="signup")
 api.add_resource(Login, '/login', endpoint="login")
 api.add_resource(Logout, '/logout', endpoint="logout")
