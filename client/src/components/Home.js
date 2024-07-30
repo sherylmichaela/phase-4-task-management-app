@@ -3,8 +3,8 @@ import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
+import Card from "react-bootstrap/Card";
+import CreateTaskButton from "./CreateTaskButton";
 
 export default function Home({ user }) {
   const [tasks, setTasks] = useState([]);
@@ -26,79 +26,9 @@ export default function Home({ user }) {
     );
   }
 
-  function CreateTaskButton(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Create a new task
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Container>
-            <Form>
-              <Row>
-                <Col xs={12}>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>What's your task?</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Buy groceries"
-                      autoFocus
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={6}>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>Category</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Shopping"
-                      autoFocus
-                    />
-                  </Form.Group>
-                </Col>
-                <Col sm={6}>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>Due Date</Form.Label>
-                    <Form.Control type="date" autoFocus />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Form>
-          </Container>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={props.onHide}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={props.onHide}>
-            Add task
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
   return (
     <Container className="mt-5">
-      <Row>
+      <Row className="mb-4">
         <Col sm={10}>
           <h1>Welcome back, {user.username}!</h1>
         </Col>
@@ -117,15 +47,50 @@ export default function Home({ user }) {
       <Row>
         {tasks.length > 0 ? (
           <React.Fragment>
-            {tasks.map((task) => {
-              return (
-                <Row>
-                  <Col>
-                    <h3>{task.task_name}</h3>
+            {/* <Tab.Container
+              id="list-group-tabs-example"
+              defaultActiveKey="#link1"
+            >
+              <Row>
+                <Col sm={4}>
+                  <ListGroup>
+                    {tasks.map((task, index) => (
+                      <ListGroup.Item key={index} action href={`#link${index}`}>
+                        {task.task_name}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </Col>
+                <Col sm={8}>
+                  <Tab.Content>
+                    {tasks.map((task, index) => (
+                      <Tab.Pane key={index} eventKey={`#link${index}`}>
+                        List of subtasks
+                      </Tab.Pane>
+                    ))}
+                  </Tab.Content>
+                </Col>
+              </Row>
+            </Tab.Container> */}
+            <Container>
+              <Row>
+                {tasks.map((task) => (
+                  <Col md={3} className="mb-4 d-flex justify-content-center">
+                    <Card
+                      bg="secondary"
+                      key="secondary"
+                      style={{ width: "18rem" }}
+                    >
+                      {/* <Card.Header></Card.Header> */}
+                      <Card.Body>
+                        <Card.Title>{task.task_name}</Card.Title>
+                        <Card.Text>Test</Card.Text>
+                      </Card.Body>
+                    </Card>
                   </Col>
-                </Row>
-              );
-            })}
+                ))}
+              </Row>
+            </Container>
           </React.Fragment>
         ) : (
           <p>No tasks created!</p>

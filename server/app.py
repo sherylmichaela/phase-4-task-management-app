@@ -107,7 +107,7 @@ class Tasks(Resource):
         task_name = request.json.get('task_name')
         category = request.json.get('category')
         task_due_date = datetime.strptime(request.json.get('task_due_date'), '%Y-%m-%d')
-        task_status = request.json.get('task_status')
+        task_status = request.json.get('task_status', 'pending')
 
         new_task = Task(task_name=task_name, category=category, task_due_date=task_due_date, task_status=task_status, user_id=session['user_id'])
 
