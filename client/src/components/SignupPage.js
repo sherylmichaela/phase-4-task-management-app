@@ -9,6 +9,7 @@ export default function SignupPage({ user, setUser }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signupSuccess, setSignupSuccess] = useState("");
 
   function signup(e) {
     e.preventDefault();
@@ -18,12 +19,20 @@ export default function SignupPage({ user, setUser }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({
+        username: username,
+        email: email,
+        password: password,
+      }),
     })
       .then((response) => response.json())
       .then((json) => {
         if (json.id) {
           setUser(json);
+          setUsername("");
+          setEmail("");
+          setPassword("");
+          setSignupSuccess("User account has been created.");
         }
       });
   }
@@ -76,6 +85,7 @@ export default function SignupPage({ user, setUser }) {
           <p>
             Already have an account? <Link to="/login">Login here</Link>
           </p>
+          <p>{signupSuccess}</p>
         </Col>
       </Row>
     </Container>

@@ -37,9 +37,9 @@ class Signup(Resource):
         if user.id:
             session['user'] = user.to_dict() # Include to_dict() to make it JSON serialisable.
 
-            return make_response({"message": "User account has been created."}, 201)
+            return make_response(user.to_dict(), 201)
         
-        return make_response({"error": "Signup unsucessful"}, 400)
+        return make_response({"error": "Signup unsucessful"}, 403)
         
     
 class Login(Resource):

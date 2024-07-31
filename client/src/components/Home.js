@@ -30,7 +30,7 @@ export default function Home({ user }) {
     <Container className="mt-5">
       <Row className="mb-4">
         <Col sm={10}>
-          <h1>Welcome back, {user.username}!</h1>
+          <h1>Welcome, {user.username}!</h1>
         </Col>
         <Col sm={2} className="d-flex justify-content-end">
           <div className="form-group">
