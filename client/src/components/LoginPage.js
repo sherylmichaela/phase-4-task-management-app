@@ -17,11 +17,13 @@ export default function LoginPage({ user, setUser }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username: username, password: password }),
     })
       .then((response) => response.json())
       .then((json) => {
-        setUser(json);
+        if (json.id) {
+          setUser(json);
+        }
       });
   }
 

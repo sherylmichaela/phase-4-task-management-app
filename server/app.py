@@ -8,25 +8,6 @@ from datetime import datetime
 def index():
     return make_response({"message": "Welcome to the Task Management App!"}, 200)
 
-# @app.before_request
-# def authenticate():
-#     exempted_routes = {
-#         "/": ["GET"],
-#         "/signup": ["POST"],
-#         "/login": ["POST"],
-#         "/me": ["GET"],
-#         "/logout": ["DELETE"]
-#     }
-
-#     if request.path in exempted_routes:
-#         allowed_methods = exempted_routes[request.path]
-
-#         if request.method in allowed_methods:
-#             return None
-        
-#     if 'user' not in session:
-#         return make_response({"message": "Unauthorised"}, 403)
-
 class Signup(Resource):
     def post(self):
         user = User(username=request.json.get('username'), email=request.json.get('email'), hashed_password=request.json.get('password'))
@@ -41,7 +22,6 @@ class Signup(Resource):
         
         return make_response({"error": "Signup unsucessful"}, 403)
         
-    
 class Login(Resource):
     def post(self):
         username = request.json.get('username')
@@ -52,18 +32,6 @@ class Login(Resource):
 
         if not user:
             user = User.query.filter(User.email == email).first()
-
-        # username = request.json.get('username')
-        # email = request.json.get('email')
-        # password = request.json.get('password')
-
-        # user = None
-
-        # if username and not email:
-        #     user = User.query.filter(User.username == username).first()
-
-        # elif email and not username:
-        #     user = User.query.filter(User.email == email).first()
 
         if user and user.authenticate(password):
             session['user_id'] = user.id
@@ -118,6 +86,7 @@ class Tasks(Resource):
             return make_response(new_task.to_dict(), 201)
         
         return make_response({"error": "error occurred"}, 400)
+    
 
 # class Tags(Resource):
 #     def get(self):

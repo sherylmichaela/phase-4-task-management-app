@@ -40,6 +40,8 @@ export default function Home({ user }) {
             <CreateTaskButton
               show={modalShow}
               onHide={() => setModalShow(false)}
+              tasks={tasks}
+              setTasks={setTasks}
             />
           </div>
         </Col>
@@ -47,31 +49,6 @@ export default function Home({ user }) {
       <Row>
         {tasks.length > 0 ? (
           <React.Fragment>
-            {/* <Tab.Container
-              id="list-group-tabs-example"
-              defaultActiveKey="#link1"
-            >
-              <Row>
-                <Col sm={4}>
-                  <ListGroup>
-                    {tasks.map((task, index) => (
-                      <ListGroup.Item key={index} action href={`#link${index}`}>
-                        {task.task_name}
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                </Col>
-                <Col sm={8}>
-                  <Tab.Content>
-                    {tasks.map((task, index) => (
-                      <Tab.Pane key={index} eventKey={`#link${index}`}>
-                        List of subtasks
-                      </Tab.Pane>
-                    ))}
-                  </Tab.Content>
-                </Col>
-              </Row>
-            </Tab.Container> */}
             <Container>
               <Row>
                 {tasks.map((task) => (
@@ -84,7 +61,15 @@ export default function Home({ user }) {
                       {/* <Card.Header></Card.Header> */}
                       <Card.Body>
                         <Card.Title>{task.task_name}</Card.Title>
-                        <Card.Text>Test</Card.Text>
+                        <Card.Text>
+                          Test <br />
+                          <Button variant="primary" className="mt-3 me-3">
+                            Edit task
+                          </Button>
+                          <Button variant="danger" className="mt-3 me-3">
+                            Delete task
+                          </Button>
+                        </Card.Text>
                       </Card.Body>
                     </Card>
                   </Col>

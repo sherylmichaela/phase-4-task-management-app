@@ -11,10 +11,34 @@ export default function CreateTaskButton(props) {
   const [taskName, setTaskName] = useState("");
   const [category, setCategory] = useState("");
   const [taskDueDate, setTaskDueDate] = useState("");
+  // const [tasks, setTasks] = useState([]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    CreateTask({ taskName, category, taskDueDate });
-    props.onHide();
+    // CreateTask({ taskName, category, taskDueDate });
+
+    fetch("/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        task_name: taskName,
+        category: category,
+        task_due_date: taskDueDate.toString(),
+        task_status: "pending",
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.id) {
+          props.setTasks([...props.tasks, json]);
+          setTaskName("");
+          setCategory("");
+          setTaskDueDate("");
+          props.onHide();
+        }
+      });
   };
 
   return (
@@ -31,7 +55,7 @@ export default function CreateTaskButton(props) {
       </Modal.Header>
       <Modal.Body>
         <Container>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Row>
               <Col xs={12}>
                 <Form.Group className="mb-3" controlId="formTaskName">
@@ -71,25 +95,25 @@ export default function CreateTaskButton(props) {
                 </Form.Group>
               </Col>
             </Row>
-            <Form onSubmit={handleSubmit}>
-              <Row className="mt-3">
-                <Col>
-                  <input
-                    type="submit"
-                    className="btn btn-primary btn-block"
-                    value="Add task"
-                  />
-                </Col>
-                <Col>
-                  <input
-                    type="submit"
-                    className="btn btn-secondary btn-block"
-                    value="Close"
-                    onClick={props.onHide}
-                  />
-                </Col>
-              </Row>
-            </Form>
+
+            <Row className="mt-3">
+              <Col>
+                <input
+                  type="submit"
+                  className="btn btn-primary btn-block"
+                  value="Add task"
+                  onClick={props.onHide}
+                />
+              </Col>
+              <Col>
+                <input
+                  type="submit"
+                  className="btn btn-secondary btn-block"
+                  value="Close"
+                  onClick={props.onHide}
+                />
+              </Col>
+            </Row>
           </Form>
         </Container>
       </Modal.Body>

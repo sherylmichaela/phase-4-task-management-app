@@ -9,32 +9,68 @@ export default function SignupPage({ user, setUser }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [invalidUsername, setInvalidUsername] = useState("");
+  const [invalidEmail, setInvalidEmail] = useState("");
+  const [invalidPassword, setInvalidPassword] = useState("");
   const [signupSuccess, setSignupSuccess] = useState("");
+
+  function validateUsername(username) {
+    const pattern = /^[a-zA-Z][a-zA-Z0-9_.]{2,18}[a-zA-Z0-9]$/;
+    return pattern.test(username);
+  }
+
+  function validateEmail(email) {
+    const pattern = /^[a-zA-Z0-9_.-]+\@[a-zA-Z0-9]+\.[a-zA-Z]{2,5}$/;
+    return pattern.test(email);
+  }
+
+  function validatePassword(password) {
+    return password.length >= 6;
+  }
 
   function signup(e) {
     e.preventDefault();
 
-    fetch("/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.id) {
-          setUser(json);
-          setUsername("");
-          setEmail("");
-          setPassword("");
-          setSignupSuccess("User account has been created.");
-        }
-      });
+    let valid = true;
+
+    if (!validateUsername(username)) {
+      setInvalidUsername("Invalid username");
+      valid = false;
+    }
+
+    if (!validateEmail(email)) {
+      setInvalidEmail("Invalid email address");
+      valid = false;
+    }
+
+    if (!validatePassword(password)) {
+      setInvalidPassword("Password must be at least 6 characters long");
+      valid = false;
+    }
+
+    if (valid) {
+      fetch("/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          email: email,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.id) {
+            setUser(json);
+            setUsername("");
+            setEmail("");
+            setPassword("");
+            setSignupSuccess("User account has been created.");
+          }
+        });
+    }
   }
 
   if (user) {
@@ -55,6 +91,7 @@ export default function SignupPage({ user, setUser }) {
                 className="form-control"
                 onChange={(e) => setUsername(e.target.value)}
               />
+              <p>{invalidUsername}</p>
             </div>
             <div className="form-group mb-4 mt-4">
               <label>Email</label>
@@ -64,6 +101,7 @@ export default function SignupPage({ user, setUser }) {
                 className="form-control"
                 onChange={(e) => setEmail(e.target.value)}
               />
+              <p>{invalidEmail}</p>
             </div>
             <div className="form-group mb-4">
               <label>Password</label>
@@ -73,6 +111,7 @@ export default function SignupPage({ user, setUser }) {
                 className="form-control"
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <p>{invalidPassword}</p>
             </div>
             <div className="form-group">
               <input
