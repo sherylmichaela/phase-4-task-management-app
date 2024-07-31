@@ -3,6 +3,7 @@ from flask import make_response, session, request
 from models import db, User, Task
 from flask_restful import Resource
 from datetime import datetime
+from sqlalchemy import and_
 
 @app.route('/')
 def index():
@@ -86,6 +87,49 @@ class Tasks(Resource):
             return make_response(new_task.to_dict(), 201)
         
         return make_response({"error": "error occurred"}, 400)
+
+
+class TaskById(Resource):
+    # /tasks/<int:id>
+
+    @classmethod
+    def find_task(cls, id):
+        return Task.query.filter(and_(Task.id == id, Task.user_id == session['user_id'])).first()
+    
+    def get(self, id):
+        task = TaskById.find_task(id)
+
+        if task:
+            return make_response(task.to_dict(), 200)
+        
+        return make_response({"error": "You're not allowed to view this task"}, 401)
+
+    def patch(self, id):
+        task = TaskById.find_task(id)
+        
+        if task:
+            for attr in request.json:
+                if attr == "task_due_date":
+                    request.json[attr] = datetime.strptime(request.json[attr], '%Y-%m-%d')  
+                setattr(task, attr, request.json[attr])
+
+            db.session.commit()
+
+            return make_response(task.to_dict(), 200)
+        
+        return make_response({"error": "No task found"}, 404)
+    
+    def delete(self, id):
+        task = TaskById.find_task(id)
+
+        if task:
+            db.session.delete()
+            db.session.commit()
+
+            return make_response({"message": "Task is deleted successfully"}, 200)
+        
+        return make_response({"error": "No task found"}, 404)
+
     
 
 # class Tags(Resource):
@@ -106,7 +150,9 @@ api.add_resource(Signup, '/signup', endpoint="signup")
 api.add_resource(Login, '/login', endpoint="login")
 api.add_resource(Logout, '/logout', endpoint="logout")
 api.add_resource(CheckSession, '/me', endpoint="me")
+
 api.add_resource(Tasks, '/tasks', endpoint='/tasks')
+api.add_resource(TaskById, '/tasks/<int:id>')
 
 if __name__ == "__main__":
     app.run(port=4000, debug=True)
