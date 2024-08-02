@@ -41,7 +41,7 @@ if __name__ == '__main__':
     pass
     # delete_all_users()
     # delete_all_tasks()
-    # delete_all_tags()
-    # delete_all_tasktags()
+    delete_all_tags()
+    delete_all_tasktags()
     # delete_all_subtasks()
     # enter_user()

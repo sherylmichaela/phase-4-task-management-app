@@ -104,8 +104,6 @@ class Tag(db.Model, SerializerMixin):
 class TaskTag(db.Model, SerializerMixin): # Only main tasks (not subtasks) can be tagged
     __tablename__ = "tasktags"
 
-    serialize_rules = ('-task.tasktags', '-tag.tasktags')
-
     id = db.Column(db.Integer, primary_key=True)
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'))
@@ -113,7 +111,7 @@ class TaskTag(db.Model, SerializerMixin): # Only main tasks (not subtasks) can b
     task = db.relationship('Task', back_populates='tasktags')
     tag = db.relationship('Tag', back_populates='tasktags')
 
-    serialize_rules = ('-task.tasktags', '-tag.tasktags')
+    serialize_rules = ('-task.tasktags', '-tag.tasktags', '-tag_id')
 
     def __repr__(self):
         return f"The task [{self.task.task_name}] has tag [{self.tag.tag}] "
