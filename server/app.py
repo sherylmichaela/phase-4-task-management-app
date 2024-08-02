@@ -149,21 +149,20 @@ class Subtasks(Resource):
         
         return make_response({"error": "Pls log in to view subtasks."}, 401)
     
-    # def post(self):
-    #     task_name = request.json.get('task_name')
-    #     category = request.json.get('category')
-    #     task_due_date = datetime.strptime(request.json.get('task_due_date'), '%Y-%m-%d')
-    #     task_status = request.json.get('task_status', 'pending')
+    def post(self, task_id):
+        subtask_name = request.json.get('subtask_name')
+        subtask_due_date = datetime.strptime(request.json.get('subtask_due_date'), '%Y-%m-%d')
+        subtask_status = request.json.get('subtask_status', 'pending')
 
-    #     new_task = Task(task_name=task_name, category=category, task_due_date=task_due_date, task_status=task_status, user_id=session['user_id'])
+        new_subtask = Subtask(subtask_name=subtask_name, task_id=task_id, subtask_due_date=subtask_due_date, subtask_status=subtask_status)
 
-    #     db.session.add(new_task)
-    #     db.session.commit()
+        db.session.add(new_subtask)
+        db.session.commit()
 
-    #     if new_task.id:
-    #         return make_response(new_task.to_dict(), 201)
+        if new_subtask.id:
+            return make_response(new_subtask.to_dict(), 201)
         
-    #     return make_response({"error": "error occurred"}, 400)
+        return make_response({"error": "error occurred"})
 
 # class SubtaskById(Resource):
 #     # /tasks/<int:id>/subtasks/<int:id>
@@ -180,22 +179,6 @@ class Subtasks(Resource):
 
 #         return make_response({"error": "This subtask doesn't exist or you may not have permission to view this subtask"}, 401)
 
-#     def post(self, task_id):
-#         task = TaskById.find_task(task_id)
-
-#         if not task:
-#             return make_response({"error": "This task doesn't exist or you may not have permission to view this task"}, 401)
-        
-#         subtask_name = request.json.get('subtask_name')
-#         subtask_due_date = datetime.strptime(request.json.get('subtask_due_date'), '%Y-%m-%d')
-#         subtask_status = request.json.get('subtask_status', 'pending')
-
-#         subtask = Subtask(subtask_name=subtask_name, task_id=task_id, subtask_due_date=subtask_due_date, subtask_status=subtask_status)
-
-#         db.session.add(subtask)
-#         db.session.commit()
-
-#         return make_response(subtask.to_dict(), 201)
 
 # class AddTags(Resource):
 #     # /tasks/<int:id>/addtags
@@ -217,7 +200,7 @@ api.add_resource(Logout, '/logout', endpoint="logout")
 api.add_resource(CheckSession, '/me', endpoint="me")
 
 api.add_resource(Tasks, '/tasks', endpoint='tasks')
-# api.add_resource(TaskById, '/tasks/<int:id>')
+api.add_resource(TaskById, '/tasks/<int:id>')
 
 api.add_resource(Subtasks, '/tasks/<int:task_id>/subtasks')
 
