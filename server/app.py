@@ -10,6 +10,8 @@ def index():
     return make_response({"message": "Welcome to the Task Management App!"}, 200)
 
 class Signup(Resource):
+    # /signup
+
     def post(self):
         user = User(username=request.json.get('username'), email=request.json.get('email'), hashed_password=request.json.get('password'))
 
@@ -24,6 +26,8 @@ class Signup(Resource):
         return make_response({"error": "Signup unsucessful"}, 403)
         
 class Login(Resource):
+    # /login
+
     def post(self):
         username = request.json.get('username')
         email = request.json.get('email')
@@ -42,12 +46,16 @@ class Login(Resource):
         return make_response({"error": "Incorrect username/password"}, 401)
     
 class Logout(Resource):
+    #  /logout
+
     def delete(self):
         session.pop('user_id', None)
 
         return make_response({"message": "Logout successful!"}, 200)
 
 class CheckSession(Resource):
+    # /me
+
     def get(self):
 
         if 'user_id' in session:
@@ -59,6 +67,8 @@ class CheckSession(Resource):
         return make_response({"error": "No user is currently signed in."}, 403)
 
 class Tasks(Resource):
+    # /tasks
+
     def get(self):
 
         if 'user_id' in session:
@@ -285,12 +295,18 @@ class TaskTagById(Resource):
                 if task_tag:
                     
                     for attr in request.json:
-                        setattr(task_tag, attr, request.json[attr])
-                    # # Update the task tag with new data, if any
-                    # if 'tag_id' in request.json:
-                    #     task_tag.tag_id = request.json['tag_id']
 
-                    db.session.commit()
+                        if attr == 'tag_name':
+                            tag = Tag.query.filter(Tag.tag_name == request.json[attr])
+
+                            if not tag:
+                                tag=Tag(tag_name=request.json[attr])
+                                db.session.add(tag)
+                                db.session.commit()
+                            
+                            task_tag.tag_id = tag.id
+                            setattr(task_tag, attr, request.json[attr])
+                            db.session.commit()
 
                     return make_response(task_tag.to_dict(), 200)
                 
@@ -300,6 +316,25 @@ class TaskTagById(Resource):
         
         return make_response({"error": "Pls log in to update task tags."}, 401)
     
+    def delete(self, task_id, tag_id):
+
+        if 'user_id' in session:
+            task = self.find_task(task_id)
+
+            if task:
+                task_tag = self.find_task_tag(task_id, tag_id)
+
+                if task_tag:
+                    db.session.delete(task_tag)
+                    db.session.commit()
+                    
+                    return make_response({"message": "Task tag deleted"}, 200)
+                
+                return make_response({"error": "Task tag not found"}, 404)
+            
+            return make_response({"error": "Task not found or access denied"}, 404)
+        
+        return make_response({"error": "Pls log in to delete task tags."}, 401)
 
 
 api.add_resource(Signup, '/signup', endpoint="signup")

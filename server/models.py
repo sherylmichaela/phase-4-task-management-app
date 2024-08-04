@@ -72,7 +72,7 @@ class Task(db.Model, SerializerMixin):
     task_name = db.Column(db.String(255), nullable=False)
     category = db.Column(db.String(255))
     task_due_date = db.Column(db.DateTime)
-    task_status = db.Column(db.String, default="Not Completed")
+    task_status = db.Column(db.String, default="pending")
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     user = db.relationship('User', back_populates='tasks')
