@@ -5,6 +5,8 @@ import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import CreateTaskButton from "./CreateTaskButton";
+import backgroundImage from "../assets/main-bg.jpg";
+import "./Home.css";
 
 export default function Home({ user }) {
   const [tasks, setTasks] = useState([]);
@@ -18,11 +20,14 @@ export default function Home({ user }) {
 
   if (!user) {
     return (
-      <Container>
-        <Row>
-          <Col>Welcome to the app. Pls log in!</Col>
-        </Row>
-      </Container>
+      <div>
+        <div className="background"></div>
+        <Container>
+          <Row>
+            <Col>Welcome to the app. Pls log in!</Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 
