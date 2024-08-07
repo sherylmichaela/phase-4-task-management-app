@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import CreateTask from "./CreateTask";
 import "./CreateTaskButton.css";
 
 export default function CreateTaskButton(props) {

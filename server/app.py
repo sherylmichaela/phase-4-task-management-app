@@ -297,7 +297,7 @@ class TaskTagById(Resource):
                     for attr in request.json:
 
                         if attr == 'tag_name':
-                            tag = Tag.query.filter(Tag.tag_name == request.json[attr])
+                            tag = Tag.query.filter(Tag.tag_name == request.json[attr]).first()
 
                             if not tag:
                                 tag=Tag(tag_name=request.json[attr])
