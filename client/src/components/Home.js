@@ -19,6 +19,16 @@ export default function Home({ user }) {
       .then((json) => setTasks(json));
   }, []);
 
+  function deleteTask(taskId) {
+    fetch("/tasks/" + taskId, {
+      method: "DELETE",
+    }).then((response) => {
+      if (response.ok) {
+        setTasks(tasks.filter((task) => task.id !== taskId));
+      }
+    });
+  }
+
   if (!user) {
     return (
       <div>
@@ -89,7 +99,11 @@ export default function Home({ user }) {
                               <Button variant="primary" className="mt-3 me-3">
                                 Edit task
                               </Button>
-                              <Button variant="danger" className="mt-3 me-3">
+                              <Button
+                                variant="danger"
+                                className="mt-3 me-3"
+                                onClick={() => deleteTask(task.id)}
+                              >
                                 Delete task
                               </Button>
                             </Card.Text>
