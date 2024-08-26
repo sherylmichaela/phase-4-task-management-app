@@ -3,6 +3,7 @@ import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -16,7 +17,18 @@ export default function Home({ user }) {
   useEffect(() => {
     fetch("/tasks")
       .then((response) => response.json())
-      .then((json) => setTasks(json));
+      .then((json) => {
+        const tasksWithTags = json.map((task) =>
+          fetch(`/tasks/${task.id}/tasktags`)
+            .then((response) => response.json())
+            .then((tags) => ({ ...task, tags }))
+        );
+
+        // Wait for all tasks to have their tags fetched
+        Promise.all(tasksWithTags).then((updatedTasks) =>
+          setTasks(updatedTasks)
+        );
+      });
   }, []);
 
   function deleteTask(taskId) {
@@ -93,19 +105,48 @@ export default function Home({ user }) {
                         >
                           {/* <Card.Header></Card.Header> */}
                           <Card.Body>
+                            <Badge
+                              pill
+                              bg="info"
+                              text="dark"
+                              className="float-end"
+                            >
+                              {task.task_status}
+                            </Badge>
+                            <br />
                             <Card.Title>{task.task_name}</Card.Title>
                             <Card.Text>
-                              Test <br />
-                              <Button variant="primary" className="mt-3 me-3">
-                                Edit task
-                              </Button>
-                              <Button
-                                variant="danger"
-                                className="mt-3 me-3"
-                                onClick={() => deleteTask(task.id)}
-                              >
-                                Delete task
-                              </Button>
+                              {task.tags && task.tags.length > 0 ? (
+                                task.tags.map((tag, index) => (
+                                  <Badge
+                                    key={index}
+                                    pill
+                                    bg="dark"
+                                    className="me-2 mb-3"
+                                  >
+                                    {tag.tag_name}
+                                  </Badge>
+                                ))
+                              ) : (
+                                <p>No tags</p>
+                              )}
+                              <Row>
+                                <Col md={6}>
+                                  <div className="d-grid gap-2 mt-3">
+                                    <Button variant="primary">Edit</Button>
+                                  </div>
+                                </Col>
+                                <Col md={6}>
+                                  <div className="d-grid gap-2 mt-3">
+                                    <Button
+                                      variant="danger"
+                                      onClick={() => deleteTask(task.id)}
+                                    >
+                                      Delete
+                                    </Button>
+                                  </div>
+                                </Col>
+                              </Row>
                             </Card.Text>
                           </Card.Body>
                         </Card>

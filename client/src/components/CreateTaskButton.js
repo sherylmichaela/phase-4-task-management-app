@@ -25,7 +25,7 @@ export default function CreateTaskButton(props) {
         task_name: taskName,
         category: category,
         task_due_date: taskDueDate.toString(),
-        task_status: "pending",
+        task_status: "not yet started",
       }),
     })
       .then((response) => response.json())
