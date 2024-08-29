@@ -105,7 +105,7 @@ export default function Home({ user }) {
                 className="mb-3"
                 justify
               >
-                <Tab eventKey="all-tasks" title="All Tasks">
+                <Tab eventKey="all-tasks" title="All">
                   <Row>
                     {tasks.map((task) => (
                       <Col
@@ -119,13 +119,21 @@ export default function Home({ user }) {
                         >
                           {/* <Card.Header></Card.Header> */}
                           <Card.Body>
-                            <Badge
+                            {/* <Badge
                               pill
                               bg="info"
                               text="dark"
                               className="float-end"
                             >
                               {task.task_status}
+                            </Badge> */}
+                            <Badge
+                              pill
+                              bg="info"
+                              text="dark"
+                              className="float-end me-1"
+                            >
+                              {task.task_due_date.substring(0, 10)}
                             </Badge>
                             <br />
                             <Card.Title>{task.task_name}</Card.Title>
@@ -193,13 +201,21 @@ export default function Home({ user }) {
                         >
                           {/* <Card.Header></Card.Header> */}
                           <Card.Body>
-                            <Badge
+                            {/* <Badge
                               pill
                               bg="info"
                               text="dark"
                               className="float-end"
                             >
                               {task.task_status}
+                            </Badge> */}
+                            <Badge
+                              pill
+                              bg="info"
+                              text="dark"
+                              className="float-end me-1"
+                            >
+                              {task.task_due_date.substring(0, 10)}
                             </Badge>
                             <br />
                             <Card.Title>{task.task_name}</Card.Title>
@@ -267,13 +283,21 @@ export default function Home({ user }) {
                         >
                           {/* <Card.Header></Card.Header> */}
                           <Card.Body>
-                            <Badge
+                            {/* <Badge
                               pill
                               bg="info"
                               text="dark"
                               className="float-end"
                             >
                               {task.task_status}
+                            </Badge> */}
+                            <Badge
+                              pill
+                              bg="info"
+                              text="dark"
+                              className="float-end me-1"
+                            >
+                              {task.task_due_date.substring(0, 10)}
                             </Badge>
                             <br />
                             <Card.Title>{task.task_name}</Card.Title>
@@ -341,13 +365,21 @@ export default function Home({ user }) {
                         >
                           {/* <Card.Header></Card.Header> */}
                           <Card.Body>
-                            <Badge
+                            {/* <Badge
                               pill
                               bg="info"
                               text="dark"
                               className="float-end"
                             >
                               {task.task_status}
+                            </Badge> */}
+                            <Badge
+                              pill
+                              bg="info"
+                              text="dark"
+                              className="float-end me-1"
+                            >
+                              {task.task_due_date.substring(0, 10)}
                             </Badge>
                             <br />
                             <Card.Title>{task.task_name}</Card.Title>

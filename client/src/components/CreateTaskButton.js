@@ -28,6 +28,15 @@ export default function CreateTaskButton(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (taskName.trim() === "") {
+      alert("Task name is required.");
+      return;
+    }
+
+    const dueDate = taskDueDate
+      ? taskDueDate
+      : new Date().toISOString().split("T")[0];
+
     fetch("/tasks", {
       method: "POST",
       headers: {
@@ -36,7 +45,7 @@ export default function CreateTaskButton(props) {
       body: JSON.stringify({
         task_name: taskName,
         category: category,
-        task_due_date: taskDueDate.toString(),
+        task_due_date: dueDate.toString(),
         task_status: radioValue,
       }),
     })
@@ -95,7 +104,7 @@ export default function CreateTaskButton(props) {
             <Row>
               <Col xs={12}>
                 <Form.Group className="mb-3" controlId="formTaskName">
-                  <Form.Label>What's your task?</Form.Label>
+                  <Form.Label>What's your task?*</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Buy groceries"
@@ -173,7 +182,6 @@ export default function CreateTaskButton(props) {
                   type="submit"
                   className="btn btn-primary btn-block"
                   value="Add task"
-                  onClick={props.onHide}
                 />
               </Col>
               <Col>
