@@ -6,7 +6,7 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
-import "./CreateTaskButton.css";
+import "./EditTaskButton.css";
 
 export default function CreateTaskButton(props) {
   const [taskName, setTaskName] = useState("");
@@ -159,7 +159,7 @@ export default function CreateTaskButton(props) {
                   <Form.Label>Tags</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="e.g. urgent, work, personal"
+                    placeholder="e.g., urgent, work, personal"
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
                   />

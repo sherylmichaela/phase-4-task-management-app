@@ -8,11 +8,13 @@ import Card from "react-bootstrap/Card";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import CreateTaskButton from "./CreateTaskButton";
+// import EditTaskButton from "./EditTaskButton";
 import "./Home.css";
 
 export default function Home({ user }) {
   const [tasks, setTasks] = useState([]);
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShowCreateTask, setModalShowCreateTask] = React.useState(false);
+  // const [modalShowEditTask, setModalShowEditTask] = React.useState(false);
 
   useEffect(() => {
     fetch("/tasks")
@@ -58,6 +60,15 @@ export default function Home({ user }) {
     );
   }
 
+  // Not Yet Started, Pending and Completed Tasks
+  const notYetStartedTasks = tasks.filter(
+    (task) => task.task_status === "not yet started"
+  );
+  const pendingTasks = tasks.filter((task) => task.task_status === "pending");
+  const completedTasks = tasks.filter(
+    (task) => task.task_status === "completed"
+  );
+
   return (
     <Container className="mt-5">
       <div className="top-row">
@@ -67,12 +78,15 @@ export default function Home({ user }) {
           </Col>
           <Col sm={2} className="d-flex justify-content-end">
             <div className="form-group">
-              <Button variant="primary" onClick={() => setModalShow(true)}>
+              <Button
+                variant="primary"
+                onClick={() => setModalShowCreateTask(true)}
+              >
                 Create a new task
               </Button>
               <CreateTaskButton
-                show={modalShow}
-                onHide={() => setModalShow(false)}
+                show={modalShowCreateTask}
+                onHide={() => setModalShowCreateTask(false)}
                 tasks={tasks}
                 setTasks={setTasks}
               />
@@ -91,7 +105,7 @@ export default function Home({ user }) {
                 className="mb-3"
                 justify
               >
-                <Tab eventKey="not-yet-started" title="Not Yet Started">
+                <Tab eventKey="all-tasks" title="All Tasks">
                   <Row>
                     {tasks.map((task) => (
                       <Col
@@ -132,8 +146,93 @@ export default function Home({ user }) {
                               )}
                               <Row>
                                 <Col md={6}>
+                                  <div className="d-grid gap-2 mt-3 form-group">
+                                    <Button
+                                      variant="primary"
+                                      // onClick={() => setModalShowEditTask(true)}
+                                    >
+                                      Edit
+                                    </Button>
+                                    {/* <EditTaskButton
+                                      show={modalShowEditTask}
+                                      onHide={() => setModalShowEditTask(false)}
+                                      // tasks={tasks}
+                                      // setTasks={setTasks}
+                                    /> */}
+                                  </div>
+                                </Col>
+                                <Col md={6}>
                                   <div className="d-grid gap-2 mt-3">
-                                    <Button variant="primary">Edit</Button>
+                                    <Button
+                                      variant="danger"
+                                      onClick={() => deleteTask(task.id)}
+                                    >
+                                      Delete
+                                    </Button>
+                                  </div>
+                                </Col>
+                              </Row>
+                            </Card.Text>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
+                </Tab>
+                <Tab eventKey="not-yet-started" title="Not Yet Started">
+                  <Row>
+                    {notYetStartedTasks.map((task) => (
+                      <Col
+                        md={3}
+                        className="mb-4 d-flex justify-content-center"
+                      >
+                        <Card
+                          bg="secondary"
+                          key="secondary"
+                          style={{ width: "18rem" }}
+                        >
+                          {/* <Card.Header></Card.Header> */}
+                          <Card.Body>
+                            <Badge
+                              pill
+                              bg="info"
+                              text="dark"
+                              className="float-end"
+                            >
+                              {task.task_status}
+                            </Badge>
+                            <br />
+                            <Card.Title>{task.task_name}</Card.Title>
+                            <Card.Text>
+                              {task.tags && task.tags.length > 0 ? (
+                                task.tags.map((tag, index) => (
+                                  <Badge
+                                    key={index}
+                                    pill
+                                    bg="dark"
+                                    className="me-2 mb-3"
+                                  >
+                                    {tag.tag_name}
+                                  </Badge>
+                                ))
+                              ) : (
+                                <p>No tags</p>
+                              )}
+                              <Row>
+                                <Col md={6}>
+                                  <div className="d-grid gap-2 mt-3 form-group">
+                                    <Button
+                                      variant="primary"
+                                      // onClick={() => setModalShowEditTask(true)}
+                                    >
+                                      Edit
+                                    </Button>
+                                    {/* <EditTaskButton
+                                      show={modalShowEditTask}
+                                      onHide={() => setModalShowEditTask(false)}
+                                      // tasks={tasks}
+                                      // setTasks={setTasks}
+                                    /> */}
                                   </div>
                                 </Col>
                                 <Col md={6}>
@@ -155,10 +254,152 @@ export default function Home({ user }) {
                   </Row>
                 </Tab>
                 <Tab eventKey="pending" title="Pending">
-                  Tab content for Profile
+                  <Row>
+                    {pendingTasks.map((task) => (
+                      <Col
+                        md={3}
+                        className="mb-4 d-flex justify-content-center"
+                      >
+                        <Card
+                          bg="secondary"
+                          key="secondary"
+                          style={{ width: "18rem" }}
+                        >
+                          {/* <Card.Header></Card.Header> */}
+                          <Card.Body>
+                            <Badge
+                              pill
+                              bg="info"
+                              text="dark"
+                              className="float-end"
+                            >
+                              {task.task_status}
+                            </Badge>
+                            <br />
+                            <Card.Title>{task.task_name}</Card.Title>
+                            <Card.Text>
+                              {task.tags && task.tags.length > 0 ? (
+                                task.tags.map((tag, index) => (
+                                  <Badge
+                                    key={index}
+                                    pill
+                                    bg="dark"
+                                    className="me-2 mb-3"
+                                  >
+                                    {tag.tag_name}
+                                  </Badge>
+                                ))
+                              ) : (
+                                <p>No tags</p>
+                              )}
+                              <Row>
+                                <Col md={6}>
+                                  <div className="d-grid gap-2 mt-3 form-group">
+                                    <Button
+                                      variant="primary"
+                                      // onClick={() => setModalShowEditTask(true)}
+                                    >
+                                      Edit
+                                    </Button>
+                                    {/* <EditTaskButton
+                                      show={modalShowEditTask}
+                                      onHide={() => setModalShowEditTask(false)}
+                                      // tasks={tasks}
+                                      // setTasks={setTasks}
+                                    /> */}
+                                  </div>
+                                </Col>
+                                <Col md={6}>
+                                  <div className="d-grid gap-2 mt-3">
+                                    <Button
+                                      variant="danger"
+                                      onClick={() => deleteTask(task.id)}
+                                    >
+                                      Delete
+                                    </Button>
+                                  </div>
+                                </Col>
+                              </Row>
+                            </Card.Text>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
                 </Tab>
                 <Tab eventKey="completed" title="Completed">
-                  Tab content for Loooonger Tab
+                  <Row>
+                    {completedTasks.map((task) => (
+                      <Col
+                        md={3}
+                        className="mb-4 d-flex justify-content-center"
+                      >
+                        <Card
+                          bg="secondary"
+                          key="secondary"
+                          style={{ width: "18rem" }}
+                        >
+                          {/* <Card.Header></Card.Header> */}
+                          <Card.Body>
+                            <Badge
+                              pill
+                              bg="info"
+                              text="dark"
+                              className="float-end"
+                            >
+                              {task.task_status}
+                            </Badge>
+                            <br />
+                            <Card.Title>{task.task_name}</Card.Title>
+                            <Card.Text>
+                              {task.tags && task.tags.length > 0 ? (
+                                task.tags.map((tag, index) => (
+                                  <Badge
+                                    key={index}
+                                    pill
+                                    bg="dark"
+                                    className="me-2 mb-3"
+                                  >
+                                    {tag.tag_name}
+                                  </Badge>
+                                ))
+                              ) : (
+                                <p>No tags</p>
+                              )}
+                              <Row>
+                                <Col md={6}>
+                                  <div className="d-grid gap-2 mt-3 form-group">
+                                    <Button
+                                      variant="primary"
+                                      // onClick={() => setModalShowEditTask(true)}
+                                    >
+                                      Edit
+                                    </Button>
+                                    {/* <EditTaskButton
+                                      show={modalShowEditTask}
+                                      onHide={() => setModalShowEditTask(false)}
+                                      // tasks={tasks}
+                                      // setTasks={setTasks}
+                                    /> */}
+                                  </div>
+                                </Col>
+                                <Col md={6}>
+                                  <div className="d-grid gap-2 mt-3">
+                                    <Button
+                                      variant="danger"
+                                      onClick={() => deleteTask(task.id)}
+                                    >
+                                      Delete
+                                    </Button>
+                                  </div>
+                                </Col>
+                              </Row>
+                            </Card.Text>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
                 </Tab>
               </Tabs>
             </Row>
