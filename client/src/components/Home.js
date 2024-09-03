@@ -224,7 +224,8 @@ export default function Home({ user }) {
                             <br />
                             <Card.Title>{task.task_name}</Card.Title>
                             <Card.Text>
-                              {task.tags && task.tags.length > 0 ? (
+                              {Array.isArray(task.tags) &&
+                              task.tags.length > 0 ? (
                                 task.tags.map((tag, index) => (
                                   <Badge
                                     key={index}

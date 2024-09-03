@@ -67,22 +67,21 @@ export default function CreateTaskButton(props) {
             );
 
           // Wait for all tag requests to finish
-          Promise.all(tagRequests)
-            .then(() =>
-              // Refetch the task to get the updated tags
-              fetch(`/tasks/${task.id}`)
-            )
-            .then((response) => response.json())
-            .then((updatedTask) => {
-              // Add the task with its tags to the task list in the parent component
-              props.setTasks([...props.tasks, updatedTask]);
-              setTaskName("");
-              setCategory("");
-              setTaskDueDate("");
-              setTags(""); // Clear tags input after submit
-              props.onHide();
-            });
+          Promise.all(tagRequests).then(() => handleCreateTask(task));
         }
+      });
+  };
+
+  const handleCreateTask = (newTask) => {
+    fetch(`/tasks/${newTask.id}/tasktags`)
+      .then((response) => response.json())
+      .then((tags) => {
+        props.setTasks([...props.tasks, { ...newTask, tags }]);
+        setTaskName("");
+        setCategory("");
+        setTaskDueDate("");
+        setTags(""); // Clear tags input after submit
+        props.onHide();
       });
   };
 
