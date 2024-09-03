@@ -16,6 +16,7 @@ export default function Home({ user }) {
   const [modalShowCreateTask, setModalShowCreateTask] = React.useState(false);
   // const [modalShowEditTask, setModalShowEditTask] = React.useState(false);
 
+  // Fetches tasks
   useEffect(() => {
     fetch("/tasks")
       .then((response) => response.json())
@@ -33,6 +34,7 @@ export default function Home({ user }) {
       });
   }, []);
 
+  // Deletes task
   function deleteTask(taskId) {
     fetch("/tasks/" + taskId, {
       method: "DELETE",
@@ -43,6 +45,7 @@ export default function Home({ user }) {
     });
   }
 
+  // Checks if any user is signed in.
   if (!user) {
     return (
       <div>
@@ -164,8 +167,9 @@ export default function Home({ user }) {
                                     {/* <EditTaskButton
                                       show={modalShowEditTask}
                                       onHide={() => setModalShowEditTask(false)}
-                                      // tasks={tasks}
-                                      // setTasks={setTasks}
+                                      tasks={tasks}
+                                      setTasks={setTasks}
+                                      // backdrop={false}
                                     /> */}
                                   </div>
                                 </Col>

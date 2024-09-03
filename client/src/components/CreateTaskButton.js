@@ -186,7 +186,7 @@ export default function CreateTaskButton(props) {
               </Col>
               <Col>
                 <input
-                  type="submit"
+                  type="button"
                   className="btn btn-secondary btn-block"
                   value="Close"
                   onClick={props.onHide}
