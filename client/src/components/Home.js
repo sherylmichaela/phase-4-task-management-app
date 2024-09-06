@@ -103,7 +103,7 @@ export default function Home({ user }) {
           <Container>
             <Row>
               <Tabs
-                defaultActiveKey="profile"
+                defaultActiveKey="all-tasks"
                 id="justify-tab-example"
                 className="mb-3"
                 justify

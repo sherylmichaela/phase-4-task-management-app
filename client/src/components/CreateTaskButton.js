@@ -52,22 +52,26 @@ export default function CreateTaskButton(props) {
       .then((response) => response.json())
       .then((task) => {
         if (task.id) {
-          // If the task was created successfully, submit each tag
-          const tagRequests = tags
-            .split(",")
-            .map((tag) => tag.trim())
-            .map((tag_name) =>
-              fetch(`/tasks/${task.id}/tasktags`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ tag_name }),
-              })
-            );
+          if (tags.length > 0) {
+            // If the task was created successfully, submit each tag
+            const tagRequests = tags
+              .split(",")
+              .map((tag) => tag.trim())
+              .map((tag_name) =>
+                fetch(`/tasks/${task.id}/tasktags`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ tag_name }),
+                })
+              );
 
-          // Wait for all tag requests to finish
-          Promise.all(tagRequests).then(() => handleCreateTask(task));
+            // Wait for all tag requests to finish
+            Promise.all(tagRequests).then(() => handleCreateTask(task));
+          } else {
+            handleCreateTask(task);
+          }
         }
       });
   };
