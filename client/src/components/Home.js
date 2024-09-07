@@ -5,17 +5,15 @@ import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import CreateTaskButton from "./CreateTaskButton";
 import "./Home.css";
+import { Navigate } from "react-router-dom";
 
 export default function Home({ user }) {
   const [tasks, setTasks] = useState([]);
   const [modalShowCreateTask, setModalShowCreateTask] = React.useState(false);
-  const [modalShowCreateSubtask, setModalShowCreateSubtask] =
-    React.useState(false);
 
   // Fetches tasks
   useEffect(() => {
@@ -50,20 +48,22 @@ export default function Home({ user }) {
 
   // Checks if any user is signed in.
   if (!user) {
-    return (
-      <div>
-        <div className="background"></div>
-        <div className="main">
-          <Container>
-            <Row>
-              <Col>
-                <div className="header">Welcome to Tasker!</div>
-              </Col>
-            </Row>
-          </Container>
-        </div>
-      </div>
-    );
+    return <Navigate to="/login" />;
+    // return (
+    //   <div>
+    //     <div className="background"></div>
+    //     <div className="main">
+    //       <Container>
+    //         <Row>
+    //           <Col>
+    //             <div className="header">Welcome to Tasker!</div>
+    //           </Col>
+    //         </Row>
+    //       </Container>
+    //     </div>
+    //   </div>
+
+    // );
   }
 
   // Not Yet Started, Pending and Completed Tasks

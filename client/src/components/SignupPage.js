@@ -91,7 +91,7 @@ export default function SignupPage({ user, setUser }) {
                 className="form-control"
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <p>{invalidUsername}</p>
+              <p className="error">{invalidUsername}</p>
             </div>
             <div className="form-group mb-4 mt-4">
               <label>Email</label>
@@ -101,7 +101,7 @@ export default function SignupPage({ user, setUser }) {
                 className="form-control"
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <p>{invalidEmail}</p>
+              <p className="error">{invalidEmail}</p>
             </div>
             <div className="form-group mb-4">
               <label>Password</label>
@@ -111,7 +111,7 @@ export default function SignupPage({ user, setUser }) {
                 className="form-control"
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <p>{invalidPassword}</p>
+              <p className="error">{invalidPassword}</p>
             </div>
             <div className="form-group">
               <input

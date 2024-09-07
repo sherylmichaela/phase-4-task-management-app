@@ -9,3 +9,8 @@
 .btn-block {
   width: 100%;
 }
+
+.error {
+  font-size: small;
+  color: red;
+}

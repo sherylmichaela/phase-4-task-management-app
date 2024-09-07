@@ -10,7 +10,7 @@ export default function Index({ user }) {
     <React.Fragment>
       <Navbar className="navbar-custom">
         <Container>
-          <Link to="/">
+          <Link to="/login">
             <Navbar.Brand>
               <img
                 src={logo}

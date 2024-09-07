@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -58,11 +58,14 @@ export default function LoginPage({ user, setUser }) {
             <div className="form-group">
               <input
                 type="submit"
-                className="btn btn-primary btn-block"
+                className="btn btn-primary btn-block mb-4"
                 value="Login"
               />
             </div>
           </form>
+          <p>
+            First time here? <Link to="/signup">Signup here</Link>
+          </p>
         </Col>
       </Row>
     </Container>
