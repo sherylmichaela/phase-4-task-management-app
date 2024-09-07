@@ -10,7 +10,7 @@ import "./CreateTaskButton.css";
 
 export default function CreateTaskButton(props) {
   const [taskName, setTaskName] = useState("");
-  const [category, setCategory] = useState("");
+  // const [category, setCategory] = useState("");
   const [taskDueDate, setTaskDueDate] = useState("");
   const [radioValue, setRadioValue] = useState("not yet started");
   const [tags, setTags] = useState("");
@@ -22,7 +22,6 @@ export default function CreateTaskButton(props) {
       variant: "outline-secondary",
     },
     { name: "Pending", value: "pending", variant: "outline-warning" },
-    { name: "Completed", value: "completed", variant: "outline-success" },
   ];
 
   const handleSubmit = (e) => {
@@ -44,7 +43,7 @@ export default function CreateTaskButton(props) {
       },
       body: JSON.stringify({
         task_name: taskName,
-        category: category,
+        // category: category,
         task_due_date: dueDate.toString(),
         task_status: radioValue,
       }),
@@ -82,7 +81,7 @@ export default function CreateTaskButton(props) {
       .then((tags) => {
         props.setTasks([...props.tasks, { ...newTask, tags }]);
         setTaskName("");
-        setCategory("");
+        // setCategory("");
         setTaskDueDate("");
         setTags(""); // Clear tags input after submit
         props.onHide();
@@ -105,7 +104,7 @@ export default function CreateTaskButton(props) {
         <Container>
           <Form onSubmit={handleSubmit}>
             <Row>
-              <Col xs={12}>
+              <Col sm={6}>
                 <Form.Group className="mb-3" controlId="formTaskName">
                   <Form.Label>What's your task?*</Form.Label>
                   <Form.Control
@@ -117,10 +116,8 @@ export default function CreateTaskButton(props) {
                   />
                 </Form.Group>
               </Col>
-            </Row>
-            <Row>
               <Col sm={6}>
-                <Form.Group className="mb-3" controlId="formCategory">
+                {/* <Form.Group className="mb-3" controlId="formCategory">
                   <Form.Label>Category</Form.Label>
                   <Form.Control
                     type="text"
@@ -129,16 +126,14 @@ export default function CreateTaskButton(props) {
                     onChange={(e) => setCategory(e.target.value)}
                     autoFocus
                   />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3" controlId="formDueDate">
-                  <Form.Label>Due Date</Form.Label>
+                </Form.Group> */}
+                <Form.Group className="mb-3" controlId="formTags">
+                  <Form.Label>Tags</Form.Label>
                   <Form.Control
-                    type="date"
-                    value={taskDueDate}
-                    onChange={(e) => setTaskDueDate(e.target.value)}
-                    autoFocus
+                    type="text"
+                    placeholder="e.g. urgent, work, personal"
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
                   />
                 </Form.Group>
               </Col>
@@ -148,7 +143,7 @@ export default function CreateTaskButton(props) {
                 <Form.Group className="mb-3" controlId="formStatus">
                   <Form.Label>Status</Form.Label>
                   <br />
-                  <ButtonGroup>
+                  <ButtonGroup className="d-flex w-100">
                     {radios.map((radio, idx) => (
                       <ToggleButton
                         key={idx}
@@ -167,13 +162,14 @@ export default function CreateTaskButton(props) {
                 </Form.Group>
               </Col>
               <Col sm={6}>
-                <Form.Group className="mb-3" controlId="formTags">
-                  <Form.Label>Tags</Form.Label>
+                <Form.Group className="mb-3" controlId="formDueDate">
+                  <Form.Label>Due Date</Form.Label>
                   <Form.Control
-                    type="text"
-                    placeholder="e.g. urgent, work, personal"
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
+                    type="date"
+                    value={taskDueDate}
+                    onChange={(e) => setTaskDueDate(e.target.value)}
+                    autoFocus
+                    min={new Date().toISOString().split("T")[0]}
                   />
                 </Form.Group>
               </Col>

@@ -5,32 +5,35 @@ import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import CreateTaskButton from "./CreateTaskButton";
-// import EditTaskButton from "./EditTaskButton";
 import "./Home.css";
 
 export default function Home({ user }) {
   const [tasks, setTasks] = useState([]);
   const [modalShowCreateTask, setModalShowCreateTask] = React.useState(false);
-  // const [modalShowEditTask, setModalShowEditTask] = React.useState(false);
+  const [modalShowCreateSubtask, setModalShowCreateSubtask] =
+    React.useState(false);
 
   // Fetches tasks
   useEffect(() => {
     fetch("/tasks")
       .then((response) => response.json())
       .then((json) => {
-        const tasksWithTags = json.map((task) =>
-          fetch(`/tasks/${task.id}/tasktags`)
-            .then((response) => response.json())
-            .then((tags) => ({ ...task, tags }))
-        );
+        if (json.length) {
+          const tasksWithTags = json.map((task) =>
+            fetch(`/tasks/${task.id}/tasktags`)
+              .then((response) => response.json())
+              .then((tags) => ({ ...task, tags }))
+          );
 
-        // Wait for all tasks to have their tags fetched
-        Promise.all(tasksWithTags).then((updatedTasks) =>
-          setTasks(updatedTasks)
-        );
+          // Wait for all tasks to have their tags fetched
+          Promise.all(tasksWithTags).then((updatedTasks) =>
+            setTasks(updatedTasks)
+          );
+        }
       });
   }, []);
 
@@ -120,16 +123,7 @@ export default function Home({ user }) {
                           key="secondary"
                           style={{ width: "18rem" }}
                         >
-                          {/* <Card.Header></Card.Header> */}
-                          <Card.Body>
-                            {/* <Badge
-                              pill
-                              bg="info"
-                              text="dark"
-                              className="float-end"
-                            >
-                              {task.task_status}
-                            </Badge> */}
+                          <Card.Header>
                             <Badge
                               pill
                               bg="info"
@@ -138,7 +132,8 @@ export default function Home({ user }) {
                             >
                               {task.task_due_date.substring(0, 10)}
                             </Badge>
-                            <br />
+                          </Card.Header>
+                          <Card.Body>
                             <Card.Title>{task.task_name}</Card.Title>
                             <Card.Text>
                               {task.tags && task.tags.length > 0 ? (
@@ -155,22 +150,16 @@ export default function Home({ user }) {
                               ) : (
                                 <p>No tags</p>
                               )}
+
                               <Row>
                                 <Col md={6}>
                                   <div className="d-grid gap-2 mt-3 form-group">
                                     <Button
-                                      variant="primary"
-                                      // onClick={() => setModalShowEditTask(true)}
+                                      variant="success"
+                                      className="complete-task-button"
                                     >
-                                      Edit
+                                      Complete
                                     </Button>
-                                    {/* <EditTaskButton
-                                      show={modalShowEditTask}
-                                      onHide={() => setModalShowEditTask(false)}
-                                      tasks={tasks}
-                                      setTasks={setTasks}
-                                      // backdrop={false}
-                                    /> */}
                                   </div>
                                 </Col>
                                 <Col md={6}>
@@ -203,16 +192,7 @@ export default function Home({ user }) {
                           key="secondary"
                           style={{ width: "18rem" }}
                         >
-                          {/* <Card.Header></Card.Header> */}
-                          <Card.Body>
-                            {/* <Badge
-                              pill
-                              bg="info"
-                              text="dark"
-                              className="float-end"
-                            >
-                              {task.task_status}
-                            </Badge> */}
+                          <Card.Header>
                             <Badge
                               pill
                               bg="info"
@@ -221,11 +201,11 @@ export default function Home({ user }) {
                             >
                               {task.task_due_date.substring(0, 10)}
                             </Badge>
-                            <br />
+                          </Card.Header>
+                          <Card.Body>
                             <Card.Title>{task.task_name}</Card.Title>
                             <Card.Text>
-                              {Array.isArray(task.tags) &&
-                              task.tags.length > 0 ? (
+                              {task.tags && task.tags.length > 0 ? (
                                 task.tags.map((tag, index) => (
                                   <Badge
                                     key={index}
@@ -239,21 +219,16 @@ export default function Home({ user }) {
                               ) : (
                                 <p>No tags</p>
                               )}
+
                               <Row>
                                 <Col md={6}>
                                   <div className="d-grid gap-2 mt-3 form-group">
                                     <Button
-                                      variant="primary"
-                                      // onClick={() => setModalShowEditTask(true)}
+                                      variant="success"
+                                      className="complete-task-button"
                                     >
-                                      Edit
+                                      Complete
                                     </Button>
-                                    {/* <EditTaskButton
-                                      show={modalShowEditTask}
-                                      onHide={() => setModalShowEditTask(false)}
-                                      // tasks={tasks}
-                                      // setTasks={setTasks}
-                                    /> */}
                                   </div>
                                 </Col>
                                 <Col md={6}>
@@ -286,16 +261,7 @@ export default function Home({ user }) {
                           key="secondary"
                           style={{ width: "18rem" }}
                         >
-                          {/* <Card.Header></Card.Header> */}
-                          <Card.Body>
-                            {/* <Badge
-                              pill
-                              bg="info"
-                              text="dark"
-                              className="float-end"
-                            >
-                              {task.task_status}
-                            </Badge> */}
+                          <Card.Header>
                             <Badge
                               pill
                               bg="info"
@@ -304,7 +270,8 @@ export default function Home({ user }) {
                             >
                               {task.task_due_date.substring(0, 10)}
                             </Badge>
-                            <br />
+                          </Card.Header>
+                          <Card.Body>
                             <Card.Title>{task.task_name}</Card.Title>
                             <Card.Text>
                               {task.tags && task.tags.length > 0 ? (
@@ -321,21 +288,16 @@ export default function Home({ user }) {
                               ) : (
                                 <p>No tags</p>
                               )}
+
                               <Row>
                                 <Col md={6}>
                                   <div className="d-grid gap-2 mt-3 form-group">
                                     <Button
-                                      variant="primary"
-                                      // onClick={() => setModalShowEditTask(true)}
+                                      variant="success"
+                                      className="complete-task-button"
                                     >
-                                      Edit
+                                      Complete
                                     </Button>
-                                    {/* <EditTaskButton
-                                      show={modalShowEditTask}
-                                      onHide={() => setModalShowEditTask(false)}
-                                      // tasks={tasks}
-                                      // setTasks={setTasks}
-                                    /> */}
                                   </div>
                                 </Col>
                                 <Col md={6}>
@@ -368,16 +330,7 @@ export default function Home({ user }) {
                           key="secondary"
                           style={{ width: "18rem" }}
                         >
-                          {/* <Card.Header></Card.Header> */}
-                          <Card.Body>
-                            {/* <Badge
-                              pill
-                              bg="info"
-                              text="dark"
-                              className="float-end"
-                            >
-                              {task.task_status}
-                            </Badge> */}
+                          <Card.Header>
                             <Badge
                               pill
                               bg="info"
@@ -386,7 +339,8 @@ export default function Home({ user }) {
                             >
                               {task.task_due_date.substring(0, 10)}
                             </Badge>
-                            <br />
+                          </Card.Header>
+                          <Card.Body>
                             <Card.Title>{task.task_name}</Card.Title>
                             <Card.Text>
                               {task.tags && task.tags.length > 0 ? (
@@ -403,21 +357,16 @@ export default function Home({ user }) {
                               ) : (
                                 <p>No tags</p>
                               )}
+
                               <Row>
                                 <Col md={6}>
                                   <div className="d-grid gap-2 mt-3 form-group">
                                     <Button
-                                      variant="primary"
-                                      // onClick={() => setModalShowEditTask(true)}
+                                      variant="success"
+                                      className="complete-task-button"
                                     >
-                                      Edit
+                                      Complete
                                     </Button>
-                                    {/* <EditTaskButton
-                                      show={modalShowEditTask}
-                                      onHide={() => setModalShowEditTask(false)}
-                                      // tasks={tasks}
-                                      // setTasks={setTasks}
-                                    /> */}
                                   </div>
                                 </Col>
                                 <Col md={6}>
