@@ -49,21 +49,6 @@ export default function Home({ user }) {
   // Checks if any user is signed in.
   if (!user) {
     return <Navigate to="/login" />;
-    // return (
-    //   <div>
-    //     <div className="background"></div>
-    //     <div className="main">
-    //       <Container>
-    //         <Row>
-    //           <Col>
-    //             <div className="header">Welcome to Tasker!</div>
-    //           </Col>
-    //         </Row>
-    //       </Container>
-    //     </div>
-    //   </div>
-
-    // );
   }
 
   // Not Yet Started, Pending and Completed Tasks
@@ -102,16 +87,16 @@ export default function Home({ user }) {
       </div>
 
       <Row>
-        {tasks.length > 0 ? (
-          <Container>
-            <Row>
-              <Tabs
-                defaultActiveKey="all-tasks"
-                id="justify-tab-example"
-                className="mb-3"
-                justify
-              >
-                <Tab eventKey="all-tasks" title="All">
+        <Container>
+          <Row>
+            <Tabs
+              defaultActiveKey="all-tasks"
+              id="justify-tab-example"
+              className="mb-3"
+              justify
+            >
+              <Tab eventKey="all-tasks" title="All">
+                {notYetStartedTasks.length > 0 ? (
                   <Row>
                     {tasks.map((task) => (
                       <Col
@@ -179,8 +164,12 @@ export default function Home({ user }) {
                       </Col>
                     ))}
                   </Row>
-                </Tab>
-                <Tab eventKey="not-yet-started" title="Not Yet Started">
+                ) : (
+                  <p className="notask">No task created yet</p>
+                )}
+              </Tab>
+              <Tab eventKey="not-yet-started" title="Not Yet Started">
+                {notYetStartedTasks.length > 0 ? (
                   <Row>
                     {notYetStartedTasks.map((task) => (
                       <Col
@@ -248,8 +237,12 @@ export default function Home({ user }) {
                       </Col>
                     ))}
                   </Row>
-                </Tab>
-                <Tab eventKey="pending" title="Pending">
+                ) : (
+                  <p className="notask">No task created yet</p>
+                )}
+              </Tab>
+              <Tab eventKey="pending" title="Pending">
+                {pendingTasks.length > 0 ? (
                   <Row>
                     {pendingTasks.map((task) => (
                       <Col
@@ -317,8 +310,12 @@ export default function Home({ user }) {
                       </Col>
                     ))}
                   </Row>
-                </Tab>
-                <Tab eventKey="completed" title="Completed">
+                ) : (
+                  <p className="notask">No task created yet</p>
+                )}
+              </Tab>
+              <Tab eventKey="completed" title="Completed">
+                {completedTasks.length > 0 ? (
                   <Row>
                     {completedTasks.map((task) => (
                       <Col
@@ -386,13 +383,13 @@ export default function Home({ user }) {
                       </Col>
                     ))}
                   </Row>
-                </Tab>
-              </Tabs>
-            </Row>
-          </Container>
-        ) : (
-          <p>No tasks created yet!</p>
-        )}
+                ) : (
+                  <p className="notask">No task created yet</p>
+                )}
+              </Tab>
+            </Tabs>
+          </Row>
+        </Container>
       </Row>
     </Container>
   );

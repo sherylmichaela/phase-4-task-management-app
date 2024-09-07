@@ -20,6 +20,7 @@ export default function SignupPage({ user, setUser }) {
   }
 
   function validateEmail(email) {
+    // eslint-disable-next-line
     const pattern = /^[a-zA-Z0-9_.-]+\@[a-zA-Z0-9]+\.[a-zA-Z]{2,5}$/;
     return pattern.test(email);
   }
@@ -78,55 +79,58 @@ export default function SignupPage({ user, setUser }) {
   }
 
   return (
-    <Container className="centered-container">
-      <Row>
-        <Col xs md="auto">
-          <h1>Sign up here to get started</h1>
-          <form onSubmit={signup}>
-            <div className="form-group mb-4 mt-4">
-              <label>Username</label>
-              <input
-                type="text"
-                value={username}
-                className="form-control"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <p className="error">{invalidUsername}</p>
-            </div>
-            <div className="form-group mb-4 mt-4">
-              <label>Email</label>
-              <input
-                type="email"
-                value={email}
-                className="form-control"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <p className="error">{invalidEmail}</p>
-            </div>
-            <div className="form-group mb-4">
-              <label>Password</label>
-              <input
-                type="password"
-                value={password}
-                className="form-control"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <p className="error">{invalidPassword}</p>
-            </div>
-            <div className="form-group">
-              <input
-                type="submit"
-                className="btn btn-primary btn-block mb-4"
-                value="Sign Up"
-              />
-            </div>
-          </form>
-          <p>
-            Already have an account? <Link to="/login">Login here</Link>
-          </p>
-          <p>{signupSuccess}</p>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <div className="background"></div>
+      <Container className="centered-container">
+        <Row>
+          <Col xs md="auto">
+            <h1>Sign up here to get started</h1>
+            <form onSubmit={signup}>
+              <div className="form-group mb-4 mt-4">
+                <label>Username</label>
+                <input
+                  type="text"
+                  value={username}
+                  className="form-control"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <p className="error">{invalidUsername}</p>
+              </div>
+              <div className="form-group mb-4 mt-4">
+                <label>Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  className="form-control"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <p className="error">{invalidEmail}</p>
+              </div>
+              <div className="form-group mb-4">
+                <label>Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  className="form-control"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <p className="error">{invalidPassword}</p>
+              </div>
+              <div className="form-group">
+                <input
+                  type="submit"
+                  className="btn btn-primary btn-block mb-4"
+                  value="Sign Up"
+                />
+              </div>
+            </form>
+            <p>
+              Already have an account? <Link to="/login">Login here</Link>
+            </p>
+            <p>{signupSuccess}</p>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }

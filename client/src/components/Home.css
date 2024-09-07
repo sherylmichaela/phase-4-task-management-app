@@ -11,8 +11,8 @@
   z-index: -1;
 }
 
-.main {
-  height: 100vh; /* Full viewport height */
+.notask {
+  height: 20vh; /* Full viewport height */
   display: flex;
   align-items: center; /* Vertical center */
   justify-content: center; /* Horizontal center */

@@ -32,42 +32,45 @@ export default function LoginPage({ user, setUser }) {
   }
 
   return (
-    <Container className="centered-container">
-      <Row>
-        <Col xs md="auto">
-          <h1>Please log in to get started:</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group mb-4 mt-4">
-              <label>Username</label>
-              <input
-                type="text"
-                value={username}
-                className="form-control"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div className="form-group mb-4">
-              <label>Password</label>
-              <input
-                type="password"
-                value={password}
-                className="form-control"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="submit"
-                className="btn btn-primary btn-block mb-4"
-                value="Login"
-              />
-            </div>
-          </form>
-          <p>
-            First time here? <Link to="/signup">Signup here</Link>
-          </p>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <div className="background"></div>
+      <Container className="centered-container">
+        <Row>
+          <Col xs md="auto">
+            <h1>Please log in to get started:</h1>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group mb-4 mt-4">
+                <label>Username</label>
+                <input
+                  type="text"
+                  value={username}
+                  className="form-control"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div className="form-group mb-4">
+                <label>Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  className="form-control"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="submit"
+                  className="btn btn-primary btn-block mb-4"
+                  value="Login"
+                />
+              </div>
+            </form>
+            <p>
+              First time here? <Link to="/signup">Sign up here</Link>
+            </p>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
