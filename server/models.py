@@ -59,6 +59,11 @@ class User(db.Model, SerializerMixin):
         if not re.match(pattern, email):
             raise ValueError('invalid email address')
         
+        email = User.query.filter(User.email == email).first()
+
+        if email:
+            raise ValueError('email has already been used')
+        
         return email
         
     def __repr__(self):

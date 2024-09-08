@@ -46,6 +46,29 @@ export default function Home({ user }) {
     });
   }
 
+  // Edit task to change status to 'Complete' task
+  function completeTask(taskId) {
+    fetch("/tasks/" + taskId, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        task_status: "completed",
+      }),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        // Update the tasks state to reflect the new task status
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === taskId ? { ...task, task_status: "completed" } : task
+          )
+        );
+      })
+      .catch((error) => console.error("Error completing task:", error));
+  }
+
   // Checks if any user is signed in.
   if (!user) {
     return <Navigate to="/login" />;
@@ -96,7 +119,7 @@ export default function Home({ user }) {
               justify
             >
               <Tab eventKey="all-tasks" title="All">
-                {notYetStartedTasks.length > 0 ? (
+                {tasks.length > 0 ? (
                   <Row>
                     {tasks.map((task) => (
                       <Col
@@ -142,6 +165,7 @@ export default function Home({ user }) {
                                     <Button
                                       variant="success"
                                       className="complete-task-button"
+                                      onClick={() => completeTask(task.id)}
                                     >
                                       Complete
                                     </Button>
@@ -215,6 +239,7 @@ export default function Home({ user }) {
                                     <Button
                                       variant="success"
                                       className="complete-task-button"
+                                      onClick={() => completeTask(task.id)}
                                     >
                                       Complete
                                     </Button>
@@ -288,6 +313,7 @@ export default function Home({ user }) {
                                     <Button
                                       variant="success"
                                       className="complete-task-button"
+                                      onClick={() => completeTask(task.id)}
                                     >
                                       Complete
                                     </Button>
@@ -361,6 +387,7 @@ export default function Home({ user }) {
                                     <Button
                                       variant="success"
                                       className="complete-task-button"
+                                      onClick={() => completeTask(task.id)}
                                     >
                                       Complete
                                     </Button>
