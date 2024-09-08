@@ -7,6 +7,7 @@ import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import Form from "react-bootstrap/Form";
 import CreateTaskButton from "./CreateTaskButton";
 import "./Home.css";
 import { Navigate } from "react-router-dom";
@@ -14,6 +15,7 @@ import { Navigate } from "react-router-dom";
 export default function Home({ user }) {
   const [tasks, setTasks] = useState([]);
   const [modalShowCreateTask, setModalShowCreateTask] = React.useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Fetches tasks
   useEffect(() => {
@@ -69,19 +71,67 @@ export default function Home({ user }) {
       .catch((error) => console.error("Error completing task:", error));
   }
 
+  // Handle search query input
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
   // Checks if any user is signed in.
   if (!user) {
     return <Navigate to="/login" />;
   }
 
-  // Not Yet Started, Pending and Completed Tasks
+  // Filter tasks based on the search query
+
+  const filteredAllTasks = searchQuery
+    ? tasks.filter(
+        (task) =>
+          Array.isArray(task.tags) &&
+          task.tags.some((tag) =>
+            tag.tag_name.toLowerCase().includes(searchQuery)
+          )
+      )
+    : tasks;
+
   const notYetStartedTasks = tasks.filter(
     (task) => task.task_status === "not yet started"
   );
+
+  const filteredNotYetStartedTasks = searchQuery
+    ? notYetStartedTasks.filter(
+        (task) =>
+          Array.isArray(task.tags) &&
+          task.tags.some((tag) =>
+            tag.tag_name.toLowerCase().includes(searchQuery)
+          )
+      )
+    : notYetStartedTasks;
+
   const pendingTasks = tasks.filter((task) => task.task_status === "pending");
+
+  const filteredPendingTasks = searchQuery
+    ? pendingTasks.filter(
+        (task) =>
+          Array.isArray(task.tags) &&
+          task.tags.some((tag) =>
+            tag.tag_name.toLowerCase().includes(searchQuery)
+          )
+      )
+    : pendingTasks;
+
   const completedTasks = tasks.filter(
     (task) => task.task_status === "completed"
   );
+
+  const filteredCompletedTasks = searchQuery
+    ? completedTasks.filter(
+        (task) =>
+          Array.isArray(task.tags) &&
+          task.tags.some((tag) =>
+            tag.tag_name.toLowerCase().includes(searchQuery)
+          )
+      )
+    : completedTasks;
 
   return (
     <Container className="mt-5">
@@ -119,9 +169,25 @@ export default function Home({ user }) {
               justify
             >
               <Tab eventKey="all-tasks" title="All">
-                {tasks.length > 0 ? (
+                <Row>
+                  <Col sm={10} className="mb-4"></Col>
+
+                  <Col sm={2}>
+                    <Form>
+                      <Form.Group className="mb-4">
+                        <Form.Control
+                          type="text"
+                          placeholder="Search by tags"
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                        />
+                      </Form.Group>
+                    </Form>
+                  </Col>
+                </Row>
+                {filteredAllTasks.length > 0 ? (
                   <Row>
-                    {tasks.map((task) => (
+                    {filteredAllTasks.map((task) => (
                       <Col
                         md={3}
                         className="mb-4 d-flex justify-content-center"
@@ -198,9 +264,24 @@ export default function Home({ user }) {
                 )}
               </Tab>
               <Tab eventKey="not-yet-started" title="Not Yet Started">
-                {notYetStartedTasks.length > 0 ? (
+                <Row>
+                  <Col sm={10} className="mb-4"></Col>
+                  <Col sm={2}>
+                    <Form>
+                      <Form.Group className="mb-4">
+                        <Form.Control
+                          type="text"
+                          placeholder="Search by tags"
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                        />
+                      </Form.Group>
+                    </Form>
+                  </Col>
+                </Row>
+                {filteredNotYetStartedTasks.length > 0 ? (
                   <Row>
-                    {notYetStartedTasks.map((task) => (
+                    {filteredNotYetStartedTasks.map((task) => (
                       <Col
                         md={3}
                         className="mb-4 d-flex justify-content-center"
@@ -272,9 +353,24 @@ export default function Home({ user }) {
                 )}
               </Tab>
               <Tab eventKey="pending" title="Pending">
-                {pendingTasks.length > 0 ? (
+                <Row>
+                  <Col sm={10} className="mb-4"></Col>
+                  <Col sm={2}>
+                    <Form>
+                      <Form.Group className="mb-4">
+                        <Form.Control
+                          type="text"
+                          placeholder="Search by tags"
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                        />
+                      </Form.Group>
+                    </Form>
+                  </Col>
+                </Row>
+                {filteredPendingTasks.length > 0 ? (
                   <Row>
-                    {pendingTasks.map((task) => (
+                    {filteredPendingTasks.map((task) => (
                       <Col
                         md={3}
                         className="mb-4 d-flex justify-content-center"
@@ -346,9 +442,24 @@ export default function Home({ user }) {
                 )}
               </Tab>
               <Tab eventKey="completed" title="Completed">
-                {completedTasks.length > 0 ? (
+                <Row>
+                  <Col sm={10} className="mb-4"></Col>
+                  <Col sm={2}>
+                    <Form>
+                      <Form.Group className="mb-4">
+                        <Form.Control
+                          type="text"
+                          placeholder="Search by tags"
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                        />
+                      </Form.Group>
+                    </Form>
+                  </Col>
+                </Row>
+                {filteredCompletedTasks.length > 0 ? (
                   <Row>
-                    {completedTasks.map((task) => (
+                    {filteredCompletedTasks.map((task) => (
                       <Col
                         md={3}
                         className="mb-4 d-flex justify-content-center"
