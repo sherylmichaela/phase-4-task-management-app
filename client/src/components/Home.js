@@ -166,8 +166,13 @@ export default function Home({ user }) {
                                       variant="success"
                                       className="complete-task-button"
                                       onClick={() => completeTask(task.id)}
+                                      disabled={
+                                        task.task_status === "completed"
+                                      }
                                     >
-                                      Complete
+                                      {task.task_status === "completed"
+                                        ? "Completed"
+                                        : "Complete"}
                                     </Button>
                                   </div>
                                 </Col>
@@ -388,6 +393,7 @@ export default function Home({ user }) {
                                       variant="success"
                                       className="complete-task-button"
                                       onClick={() => completeTask(task.id)}
+                                      disabled
                                     >
                                       Complete
                                     </Button>
