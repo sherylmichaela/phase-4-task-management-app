@@ -34,6 +34,12 @@
   width: 100%;
 }
 
-/* .complete-task-button {
-  white-space: nowrap;
-} */
+.complete-task-button {
+  font-size: 14px; /* Adjust as needed */
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.delete-task-button {
+  font-size: 14px; /* Adjust as needed */
+  white-space: nowrap; /* Prevents text from wrapping */
+}

@@ -8,8 +8,6 @@ import "./LoginPage.css";
 export default function LoginPage({ user, setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [invalidUsername, setInvalidUsername] = useState("");
-  const [invalidPassword, setInvalidPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loginSuccess, setLoginSuccess] = useState("");
 
@@ -18,9 +16,6 @@ export default function LoginPage({ user, setUser }) {
 
     setLoginError("");
     setLoginSuccess("");
-
-    setInvalidUsername("");
-    setInvalidPassword("");
 
     fetch("/login", {
       method: "POST",
@@ -60,7 +55,6 @@ export default function LoginPage({ user, setUser }) {
                   className="form-control"
                   onChange={(e) => setUsername(e.target.value)}
                 />
-                <p className="error">{invalidUsername}</p>
               </div>
               <div className="form-group mb-4">
                 <label>Password</label>
@@ -70,7 +64,6 @@ export default function LoginPage({ user, setUser }) {
                   className="form-control"
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <p className="error">{invalidPassword}</p>
               </div>
               <div className="form-group">
                 <input

@@ -73,18 +73,9 @@ export default function SignupPage({ user, setUser }) {
         .then(async (response) => {
           const data = await response.json();
           if (!response.ok) {
-            // If backend validation fails, handle errors here
-            if (data.message?.includes("username")) {
-              setInvalidUsername("Username has been taken.");
-            } else if (data.message?.includes("email")) {
-              setInvalidEmail(
-                "Email has been used. Pls use an alternative email address."
-              );
-            } else {
-              setSignupError(
-                "Username/email may have already been used. Please try again."
-              );
-            }
+            setSignupError(
+              "Username/email may have already been used. Please try again."
+            );
           }
           return data;
         })

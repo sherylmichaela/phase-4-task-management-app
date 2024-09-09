@@ -71,6 +71,40 @@ export default function Home({ user }) {
       .catch((error) => console.error("Error completing task:", error));
   }
 
+  // Mark task incomplete and move task to "pending"
+  function moveToPending(taskId) {
+    fetch("/tasks/" + taskId, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        task_status: "pending",
+      }),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        // Update the tasks state to reflect the new task status
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === taskId ? { ...task, task_status: "pending" } : task
+          )
+        );
+      })
+      .catch((error) => console.error("Error moving task to pending", error));
+  }
+
+  // Conditional checks for the button's variant in 'All Tasks'
+  const getButtonVariant = (taskStatus) => {
+    if (taskStatus === "completed") {
+      return "light";
+    } else if (taskStatus === "pending") {
+      return "success";
+    } else if (taskStatus === "not yet started") {
+      return "primary";
+    }
+  };
+
   // Handle search query input
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value.toLowerCase());
@@ -185,6 +219,7 @@ export default function Home({ user }) {
                     </Form>
                   </Col>
                 </Row>
+
                 {filteredAllTasks.length > 0 ? (
                   <Row>
                     {filteredAllTasks.map((task) => (
@@ -229,16 +264,23 @@ export default function Home({ user }) {
                                 <Col md={6}>
                                   <div className="d-grid gap-2 mt-3 form-group">
                                     <Button
-                                      variant="success"
+                                      variant={getButtonVariant(
+                                        task.task_status
+                                      )}
                                       className="complete-task-button"
-                                      onClick={() => completeTask(task.id)}
-                                      disabled={
+                                      onClick={() =>
                                         task.task_status === "completed"
+                                          ? moveToPending(task.id)
+                                          : task.task_status === "pending"
+                                          ? completeTask(task.id)
+                                          : moveToPending(task.id)
                                       }
                                     >
                                       {task.task_status === "completed"
-                                        ? "Completed"
-                                        : "Complete"}
+                                        ? "Mark incomplete"
+                                        : task.task_status === "pending"
+                                        ? "Complete task"
+                                        : "Move to pending"}
                                     </Button>
                                   </div>
                                 </Col>
@@ -246,6 +288,7 @@ export default function Home({ user }) {
                                   <div className="d-grid gap-2 mt-3">
                                     <Button
                                       variant="danger"
+                                      className="delete-task-button"
                                       onClick={() => deleteTask(task.id)}
                                     >
                                       Delete
@@ -260,7 +303,7 @@ export default function Home({ user }) {
                     ))}
                   </Row>
                 ) : (
-                  <p className="notask">No task created yet</p>
+                  <p className="notask">No task found!</p>
                 )}
               </Tab>
               <Tab eventKey="not-yet-started" title="Not Yet Started">
@@ -323,11 +366,11 @@ export default function Home({ user }) {
                                 <Col md={6}>
                                   <div className="d-grid gap-2 mt-3 form-group">
                                     <Button
-                                      variant="success"
+                                      variant="primary"
                                       className="complete-task-button"
-                                      onClick={() => completeTask(task.id)}
+                                      onClick={() => moveToPending(task.id)}
                                     >
-                                      Complete
+                                      Move to pending
                                     </Button>
                                   </div>
                                 </Col>
@@ -335,6 +378,7 @@ export default function Home({ user }) {
                                   <div className="d-grid gap-2 mt-3">
                                     <Button
                                       variant="danger"
+                                      className="delete-task-button"
                                       onClick={() => deleteTask(task.id)}
                                     >
                                       Delete
@@ -349,7 +393,7 @@ export default function Home({ user }) {
                     ))}
                   </Row>
                 ) : (
-                  <p className="notask">No task created yet</p>
+                  <p className="notask">No task found!</p>
                 )}
               </Tab>
               <Tab eventKey="pending" title="Pending">
@@ -416,7 +460,7 @@ export default function Home({ user }) {
                                       className="complete-task-button"
                                       onClick={() => completeTask(task.id)}
                                     >
-                                      Complete
+                                      Complete task
                                     </Button>
                                   </div>
                                 </Col>
@@ -438,7 +482,7 @@ export default function Home({ user }) {
                     ))}
                   </Row>
                 ) : (
-                  <p className="notask">No task created yet</p>
+                  <p className="notask">No task found!</p>
                 )}
               </Tab>
               <Tab eventKey="completed" title="Completed">
@@ -501,12 +545,15 @@ export default function Home({ user }) {
                                 <Col md={6}>
                                   <div className="d-grid gap-2 mt-3 form-group">
                                     <Button
-                                      variant="success"
+                                      variant="light"
                                       className="complete-task-button"
-                                      onClick={() => completeTask(task.id)}
-                                      disabled
+                                      onClick={() => moveToPending(task.id)}
                                     >
-                                      Complete
+                                      {task.task_status === "completed"
+                                        ? "Mark incomplete"
+                                        : task.task_status === "pending"
+                                        ? "Complete task"
+                                        : "Move to pending"}
                                     </Button>
                                   </div>
                                 </Col>
@@ -514,6 +561,7 @@ export default function Home({ user }) {
                                   <div className="d-grid gap-2 mt-3">
                                     <Button
                                       variant="danger"
+                                      className="delete-task-button"
                                       onClick={() => deleteTask(task.id)}
                                     >
                                       Delete
@@ -528,7 +576,7 @@ export default function Home({ user }) {
                     ))}
                   </Row>
                 ) : (
-                  <p className="notask">No task created yet</p>
+                  <p className="notask">No task found!</p>
                 )}
               </Tab>
             </Tabs>
