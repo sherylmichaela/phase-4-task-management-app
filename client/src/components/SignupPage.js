@@ -12,6 +12,7 @@ export default function SignupPage({ user, setUser }) {
   const [invalidUsername, setInvalidUsername] = useState("");
   const [invalidEmail, setInvalidEmail] = useState("");
   const [invalidPassword, setInvalidPassword] = useState("");
+  const [signupError, setSignupError] = useState("");
   const [signupSuccess, setSignupSuccess] = useState("");
 
   function validateUsername(username) {
@@ -29,10 +30,23 @@ export default function SignupPage({ user, setUser }) {
     return password.length >= 6;
   }
 
-  function signup(e) {
+  async function signup(e) {
     e.preventDefault();
 
     let valid = true;
+    setSignupError("");
+    setSignupSuccess("");
+
+    // Clear validation errors
+    setInvalidUsername("");
+    setInvalidEmail("");
+    setInvalidPassword("");
+
+    // Validate password
+    if (!validatePassword(password)) {
+      setInvalidPassword("Password must be at least 6 characters long");
+      valid = false;
+    }
 
     if (!validateUsername(username)) {
       setInvalidUsername("Invalid username");
@@ -41,11 +55,6 @@ export default function SignupPage({ user, setUser }) {
 
     if (!validateEmail(email)) {
       setInvalidEmail("Invalid email address");
-      valid = false;
-    }
-
-    if (!validatePassword(password)) {
-      setInvalidPassword("Password must be at least 6 characters long");
       valid = false;
     }
 
@@ -61,7 +70,25 @@ export default function SignupPage({ user, setUser }) {
           password: password,
         }),
       })
-        .then((response) => response.json())
+        .then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) {
+            // If backend validation fails, handle errors here
+            if (data.message?.includes("username")) {
+              setInvalidUsername("Username has been taken.");
+            } else if (data.message?.includes("email")) {
+              setInvalidEmail(
+                "Email has been used. Pls use an alternative email address."
+              );
+            } else {
+              setSignupError(
+                "Username/email may have already been used. Please try again."
+              );
+            }
+          }
+          return data;
+        })
+
         .then((json) => {
           if (json.id) {
             setUser(json);
@@ -127,6 +154,7 @@ export default function SignupPage({ user, setUser }) {
             <p>
               Already have an account? <Link to="/login">Login here</Link>
             </p>
+            <p className="error">{signupError}</p>
             <p>{signupSuccess}</p>
           </Col>
         </Row>

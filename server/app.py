@@ -1,5 +1,5 @@
 from config import app, api
-from flask import make_response, session, request
+from flask import make_response, session, request, jsonify
 from models import db, User, Task, Subtask, TaskTag, Tag
 from flask_restful import Resource
 from datetime import datetime
@@ -15,37 +15,45 @@ class Signup(Resource):
     # /signup
 
     def post(self):
-        user = User(username=request.json.get('username'), email=request.json.get('email'), hashed_password=request.json.get('password'))
+        try:
+            user = User(username=request.json.get('username'), email=request.json.get('email'), hashed_password=request.json.get('password'))
 
-        db.session.add(user)
-        db.session.commit()
+            db.session.add(user)
+            db.session.commit()
 
-        if user.id:
-            session['user'] = user.to_dict() # Include to_dict() to make it JSON serialisable.
+            if user.id:
+                session['user'] = user.to_dict() # Include to_dict() to make it JSON serialisable.
 
-            return make_response(user.to_dict(), 201)
+                return make_response(user.to_dict(), 201)
+            
+            return make_response({"error": "Signup unsucessful"}, 403)
         
-        return make_response({"error": "Signup unsucessful"}, 403)
+        except ValueError as ve:
+            return make_response({"error": str(ve)}, 409)
         
 class Login(Resource):
     # /login
 
     def post(self):
-        username = request.json.get('username')
-        email = request.json.get('email')
-        password = request.json.get('password')
+        try:
+            username = request.json.get('username')
+            email = request.json.get('email')
+            password = request.json.get('password')
 
-        user = User.query.filter(User.username == username).first()
+            user = User.query.filter(User.username == username).first()
 
-        if not user:
-            user = User.query.filter(User.email == email).first()
+            if not user:
+                user = User.query.filter(User.email == email).first()
 
-        if user and user.authenticate(password):
-            session['user_id'] = user.id
+            if user and user.authenticate(password):
+                session['user_id'] = user.id
 
-            return make_response(user.to_dict(), 201)
+                return make_response(user.to_dict(), 201)
+            
+            return make_response({"error": "Incorrect username/password"}, 401)
         
-        return make_response({"error": "Incorrect username/password"}, 401)
+        except ValueError as ve:
+            return make_response({"error": str(ve)}, 409)
     
 class Logout(Resource):
     #  /logout

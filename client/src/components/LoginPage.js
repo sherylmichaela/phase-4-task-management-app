@@ -8,9 +8,19 @@ import "./LoginPage.css";
 export default function LoginPage({ user, setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [invalidUsername, setInvalidUsername] = useState("");
+  const [invalidPassword, setInvalidPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginSuccess, setLoginSuccess] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    setLoginError("");
+    setLoginSuccess("");
+
+    setInvalidUsername("");
+    setInvalidPassword("");
 
     fetch("/login", {
       method: "POST",
@@ -23,6 +33,9 @@ export default function LoginPage({ user, setUser }) {
       .then((json) => {
         if (json.id) {
           setUser(json);
+          setLoginSuccess("Login successful!");
+        } else {
+          setLoginError("Invalid username or password. Pls try again.");
         }
       });
   }
@@ -47,6 +60,7 @@ export default function LoginPage({ user, setUser }) {
                   className="form-control"
                   onChange={(e) => setUsername(e.target.value)}
                 />
+                <p className="error">{invalidUsername}</p>
               </div>
               <div className="form-group mb-4">
                 <label>Password</label>
@@ -56,6 +70,7 @@ export default function LoginPage({ user, setUser }) {
                   className="form-control"
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <p className="error">{invalidPassword}</p>
               </div>
               <div className="form-group">
                 <input
@@ -68,6 +83,8 @@ export default function LoginPage({ user, setUser }) {
             <p>
               First time here? <Link to="/signup">Sign up here</Link>
             </p>
+            <p className="error">{loginError}</p>
+            <p>{loginSuccess}</p>
           </Col>
         </Row>
       </Container>
