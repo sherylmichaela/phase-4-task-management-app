@@ -21,6 +21,8 @@ class Signup(Resource):
             db.session.add(user)
             db.session.commit()
 
+            session['user_id'] = user.id
+
             if user.id:
                 session['user'] = user.to_dict() # Include to_dict() to make it JSON serialisable.
 

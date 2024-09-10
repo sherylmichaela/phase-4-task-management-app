@@ -59,36 +59,36 @@ export default function SignupPage({ user, setUser }) {
     }
 
     if (valid) {
-      fetch("/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          email: email,
-          password: password,
-        }),
-      })
-        .then(async (response) => {
-          const data = await response.json();
-          if (!response.ok) {
-            setSignupError(
-              "Username/email may have already been used. Please try again."
-            );
-          }
-          return data;
-        })
-
-        .then((json) => {
-          if (json.id) {
-            setUser(json);
-            setUsername("");
-            setEmail("");
-            setPassword("");
-            setSignupSuccess("User account has been created.");
-          }
+      try {
+        const response = await fetch("/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            email: email,
+            password: password,
+          }),
         });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setSignupError(
+            "Username/email may have already been used. Please try again."
+          );
+        } else if (data.id) {
+          // Assuming the backend response includes user data
+          setUser(data); // Log in the user by setting the user state
+          setUsername("");
+          setEmail("");
+          setPassword("");
+          setSignupSuccess("User account has been created.");
+        }
+      } catch (error) {
+        setSignupError("An error occurred. Please try again.");
+      }
     }
   }
 

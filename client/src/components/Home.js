@@ -266,7 +266,7 @@ export default function Home({ user }) {
                             <Badge
                               pill
                               bg={
-                                task.task_status == "completed"
+                                task.task_status === "completed"
                                   ? "success"
                                   : "info"
                               }
