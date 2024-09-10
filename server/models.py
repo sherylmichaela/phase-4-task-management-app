@@ -50,18 +50,18 @@ class User(db.Model, SerializerMixin):
         return username
     
     @validates('email')
-    def validate_password(self, key, email):
+    def validate_email(self, key, email):
         if not email:
             raise ValueError('email is required')
         
-        pattern = r'^[a-zA-Z0-9_.-]+\@[a-zA-Z0-9]+\.[a-zA-Z]{2,5}$'
+        pattern = r'^[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,5}$'
 
         if not re.match(pattern, email):
             raise ValueError('invalid email address')
         
-        email = User.query.filter(User.email == email).first()
+        user = User.query.filter(User.email == email).first()
 
-        if email:
+        if user:
             raise ValueError('email has already been used')
         
         return email
