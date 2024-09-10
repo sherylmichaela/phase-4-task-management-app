@@ -115,8 +115,7 @@ export default function Home({ user }) {
     return <Navigate to="/login" />;
   }
 
-  // Filter tasks based on the search query
-
+  // All Tasks
   const filteredAllTasks = searchQuery
     ? tasks.filter(
         (task) =>
@@ -131,6 +130,7 @@ export default function Home({ user }) {
     return new Date(a.task_due_date) - new Date(b.task_due_date);
   });
 
+  // Not Yet Started Tasks
   const notYetStartedTasks = tasks.filter(
     (task) => task.task_status === "not yet started"
   );
@@ -145,6 +145,13 @@ export default function Home({ user }) {
       )
     : notYetStartedTasks;
 
+  const sortedFilteredNotYetStartedTasks = [...filteredNotYetStartedTasks].sort(
+    (a, b) => {
+      return new Date(a.task_due_date) - new Date(b.task_due_date);
+    }
+  );
+
+  // Pending Tasks
   const pendingTasks = tasks.filter((task) => task.task_status === "pending");
 
   const filteredPendingTasks = searchQuery
@@ -157,6 +164,11 @@ export default function Home({ user }) {
       )
     : pendingTasks;
 
+  const sortedFilteredPendingTasks = [...filteredPendingTasks].sort((a, b) => {
+    return new Date(a.task_due_date) - new Date(b.task_due_date);
+  });
+
+  // Completed Tasks
   const completedTasks = tasks.filter(
     (task) => task.task_status === "completed"
   );
@@ -170,6 +182,12 @@ export default function Home({ user }) {
           )
       )
     : completedTasks;
+
+  const sortedFilteredCompletedTasks = [...filteredCompletedTasks].sort(
+    (b, a) => {
+      return new Date(a.task_due_date) - new Date(b.task_due_date);
+    }
+  );
 
   return (
     <Container className="mt-5">
@@ -338,9 +356,9 @@ export default function Home({ user }) {
                     </Form>
                   </Col>
                 </Row>
-                {filteredNotYetStartedTasks.length > 0 ? (
+                {sortedFilteredNotYetStartedTasks.length > 0 ? (
                   <Row>
-                    {filteredNotYetStartedTasks.map((task) => (
+                    {sortedFilteredNotYetStartedTasks.map((task) => (
                       <Col
                         md={3}
                         className="mb-4 d-flex justify-content-center"
@@ -428,9 +446,9 @@ export default function Home({ user }) {
                     </Form>
                   </Col>
                 </Row>
-                {filteredPendingTasks.length > 0 ? (
+                {sortedFilteredPendingTasks.length > 0 ? (
                   <Row>
-                    {filteredPendingTasks.map((task) => (
+                    {sortedFilteredPendingTasks.map((task) => (
                       <Col
                         md={3}
                         className="mb-4 d-flex justify-content-center"
@@ -517,9 +535,9 @@ export default function Home({ user }) {
                     </Form>
                   </Col>
                 </Row>
-                {filteredCompletedTasks.length > 0 ? (
+                {sortedFilteredCompletedTasks.length > 0 ? (
                   <Row>
-                    {filteredCompletedTasks.map((task) => (
+                    {sortedFilteredCompletedTasks.map((task) => (
                       <Col
                         md={3}
                         className="mb-4 d-flex justify-content-center"
