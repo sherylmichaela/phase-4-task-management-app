@@ -257,7 +257,14 @@ export default function Home({ user }) {
                           <Card.Header>
                             <Badge
                               pill
-                              bg="info"
+                              bg={
+                                new Date(task.task_due_date)
+                                  .toISOString()
+                                  .split("T")[0] >=
+                                new Date().toISOString().split("T")[0]
+                                  ? "info"
+                                  : "danger"
+                              }
                               text="dark"
                               className="float-end me-1"
                             >
@@ -371,7 +378,14 @@ export default function Home({ user }) {
                           <Card.Header>
                             <Badge
                               pill
-                              bg="info"
+                              bg={
+                                new Date(task.task_due_date)
+                                  .toISOString()
+                                  .split("T")[0] >=
+                                new Date().toISOString().split("T")[0]
+                                  ? "info"
+                                  : "danger"
+                              }
                               text="dark"
                               className="float-end me-1"
                             >
@@ -461,7 +475,14 @@ export default function Home({ user }) {
                           <Card.Header>
                             <Badge
                               pill
-                              bg="info"
+                              bg={
+                                new Date(task.task_due_date)
+                                  .toISOString()
+                                  .split("T")[0] >=
+                                new Date().toISOString().split("T")[0]
+                                  ? "info"
+                                  : "danger"
+                              }
                               text="dark"
                               className="float-end me-1"
                             >
@@ -550,7 +571,14 @@ export default function Home({ user }) {
                           <Card.Header>
                             <Badge
                               pill
-                              bg="info"
+                              bg={
+                                new Date(task.task_due_date)
+                                  .toISOString()
+                                  .split("T")[0] >=
+                                new Date().toISOString().split("T")[0]
+                                  ? "info"
+                                  : "danger"
+                              }
                               text="dark"
                               className="float-end me-1"
                             >

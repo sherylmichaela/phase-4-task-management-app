@@ -9,8 +9,6 @@ from sqlalchemy import and_
 def index():
     return make_response({"message": "Welcome to the Task Management App!"}, 200)
 
-
-
 class Signup(Resource):
     # /signup
 
