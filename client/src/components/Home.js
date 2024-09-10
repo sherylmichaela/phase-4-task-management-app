@@ -127,6 +127,10 @@ export default function Home({ user }) {
       )
     : tasks;
 
+  const sortedFilteredAllTasks = [...filteredAllTasks].sort((a, b) => {
+    return new Date(a.task_due_date) - new Date(b.task_due_date);
+  });
+
   const notYetStartedTasks = tasks.filter(
     (task) => task.task_status === "not yet started"
   );
@@ -220,9 +224,9 @@ export default function Home({ user }) {
                   </Col>
                 </Row>
 
-                {filteredAllTasks.length > 0 ? (
+                {sortedFilteredAllTasks.length > 0 ? (
                   <Row>
-                    {filteredAllTasks.map((task) => (
+                    {sortedFilteredAllTasks.map((task) => (
                       <Col
                         md={3}
                         className="mb-4 d-flex justify-content-center"
@@ -240,6 +244,18 @@ export default function Home({ user }) {
                               className="float-end me-1"
                             >
                               {task.task_due_date.substring(0, 10)}
+                            </Badge>
+                            <Badge
+                              pill
+                              bg={
+                                task.task_status == "completed"
+                                  ? "success"
+                                  : "info"
+                              }
+                              text="dark"
+                              className="float-end me-1"
+                            >
+                              {task.task_status}
                             </Badge>
                           </Card.Header>
                           <Card.Body>
